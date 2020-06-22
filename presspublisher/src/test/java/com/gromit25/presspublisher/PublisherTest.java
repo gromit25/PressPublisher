@@ -86,7 +86,9 @@ public class PublisherTest extends TestCase
         
     }
     
-    
+    /**
+     * 엑셀 파일로 출력 확인
+     */
     public void testPublishToExcel() {
     	
     	try (OutputStream outExcel = new FileOutputStream(new File("D:\\testPublisher.xlsx"))){
@@ -104,13 +106,15 @@ public class PublisherTest extends TestCase
     		assertTrue(true);
     		
     	} catch(Exception ex) {
+    		
     		ex.printStackTrace();
     		assertTrue(false);
+    		
     	}
     }
     
     /**
-     * 
+     * switch문 확인
      */
     public void testSwitch() {
     	
@@ -210,6 +214,9 @@ public class PublisherTest extends TestCase
     	
     }
     
+    /**
+     * for 문 확인
+     */
     public void testFor() {
     	
     	try {
@@ -247,17 +254,30 @@ public class PublisherTest extends TestCase
     	}
     }
     
+    /**
+     * Value Container에서 값을 가져올 경우(get),
+     * 특정 클래스 type으로 반환하는지 확인 
+     */
     public void testValueContainer() {
+    	
     	try {
     		
+    		// Value Container에 String 추가
 	    	ValueContainer values = new ValueContainer();
 	    	values.put("a", "TEST");
+	    	
+	    	// String 타입으로 반환 확인
 	    	assertEquals(String.class, values.get("a", String.class).getClass());
+	    	
+	        // 어떤 객체라도 ValueInstance type으로 설정된 경우,
+	        // ValueInstance 형식으로 반환되어야 한다.
 	    	assertEquals(ValueInstance.class, values.get("a", ValueInstance.class).getClass());
 	    	
 		} catch(Exception ex) {
+			
 			ex.printStackTrace();
 			assertTrue(false);
+			
 		}
 
     }
