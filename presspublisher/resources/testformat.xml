@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format>
+
+	|   TEST MESSAGE - XML FORMAT
+	|   --------------------------------------------------------------------------
+	<foreach element="message" listExp="messages">
+	|      <style type="FG_WHITE_BRIGHT"><print exp="message"/></style>
+	</foreach>
+	|   --------------------------------------------------------------------------
+	
+</format>
