@@ -1,4 +1,4 @@
-package com.presspublisher;
+package com.gromit25.presspublisher;
 
 import com.gromit25.presspublisher.evaluator.Evaluator;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
