@@ -1,5 +1,17 @@
 Manifest-Version: 1.0
+Package: com.gromit25.presspublisher
 Built-By: epozen
+Class-Path: D:/app/presspublisher/lombok-1.16.18.jar D:/app/presspubli
+ sher/jansi-1.17.1.jar D:/app/presspublisher/poi-ooxml-4.0.1.jar D:/ap
+ p/presspublisher/poi-4.0.1.jar D:/app/presspublisher/commons-codec-1.
+ 11.jar D:/app/presspublisher/commons-collections4-4.2.jar D:/app/pres
+ spublisher/commons-math3-3.6.1.jar D:/app/presspublisher/poi-ooxml-sc
+ hemas-4.0.1.jar D:/app/presspublisher/xmlbeans-3.0.2.jar D:/app/press
+ publisher/commons-compress-1.18.jar D:/app/presspublisher/curvesapi-1
+ .05.jar D:/app/presspublisher/commons-text-1.7.jar D:/app/presspublis
+ her/commons-lang3-3.9.jar D:/app/presspublisher/reflections-0.9.11.ja
+ r D:/app/presspublisher/guava-20.0.jar D:/app/presspublisher/javassis
+ t-3.21.0-GA.jar
 Build-Jdk: 1.8.0_181-1-ojdkbuild
 Created-By: Maven Integration for Eclipse
 

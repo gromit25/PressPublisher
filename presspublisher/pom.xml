@@ -12,10 +12,13 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <deploy.target.dir>D:/app/presspublisher</deploy.target.dir>
   </properties>
   
-  <!-- plug-in들  -->
+  <!-- jar 파일 생성 -->
   <build>
+    <sourceDirectory>src/main</sourceDirectory>
+    
     <plugins>
     
       <plugin>
@@ -27,38 +30,133 @@
         </configuration>
       </plugin>
       
+      <!-- 기존 배포된 파일들 모두 삭제  -->
+      <plugin>
+      	<artifactId>maven-clean-plugin</artifactId>
+      	<version>2.5</version>
+      	<executions>
+          <execution>
+            <id>clean-target</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${deploy.target.dir}</directory>
+                  <includes>
+                    <include>**/*</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+      	</executions>
+      </plugin>
+      
+      <!-- jar 파일 생성 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <outputDirectory>${deploy.target.dir}</outputDirectory>
+          <archive>
+            <manifest>
+              <packageName>com.gromit25.presspublisher</packageName>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>${deploy.target.dir}/</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <!-- library jar 파일 복사  -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>
+                ${deploy.target.dir}
+              </outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- resource 파일 복사  -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <!-- config 파일 복사  -->
+          <execution>
+            <id>copy-resources</id>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${deploy.target.dir}/resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+         </executions>
+      </plugin>
+      
     </plugins>
   </build>
 
   <!-- 의존성 설정 -->
   <dependencies>
+  
+    <!-- 단위테스트 라이브러리 -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- lombok:코딩지원 라이브러리 -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.16.18</version>
       <scope>compile</scope>
     </dependency>
+    
+    <!-- 실제 사용하는 라이브러리 -->
+    <!-- Command Line 출력시 컬러 출력용 라이브러리 -->
 	<dependency>
 	  <groupId>org.fusesource.jansi</groupId>
 	  <artifactId>jansi</artifactId>
 	  <version>1.17.1</version>
 	</dependency>
+	<!-- 엑셀 출력용 라이브러리 -->
 	<dependency>
 	  <groupId>org.apache.poi</groupId>
 	  <artifactId>poi-ooxml</artifactId>
 	  <version>4.0.1</version>
 	</dependency>
+	<!-- Evaluator에 이스케이프 문자 처리 라이브러리 -->
 	<dependency>
 	  <groupId>org.apache.commons</groupId>
 	  <artifactId>commons-text</artifactId>
 	  <version>1.7</version>
 	</dependency>
+	<!-- 클래스 로딩시 , 어노테이션을 처리하기 위한 라이브러리 -->
 	<dependency>
 	    <groupId>org.reflections</groupId>
 	    <artifactId>reflections</artifactId>
