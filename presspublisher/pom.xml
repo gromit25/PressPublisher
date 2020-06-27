@@ -17,7 +17,7 @@
   
   <!-- jar 파일 생성 -->
   <build>
-    <sourceDirectory>src/main</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     
     <plugins>
     
