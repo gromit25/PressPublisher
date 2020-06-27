@@ -87,6 +87,9 @@
               <outputDirectory>
                 ${deploy.target.dir}
               </outputDirectory>
+              <excludeGroupIds>
+                junit,org.projectlombok
+              </excludeGroupIds>
             </configuration>
           </execution>
         </executions>
