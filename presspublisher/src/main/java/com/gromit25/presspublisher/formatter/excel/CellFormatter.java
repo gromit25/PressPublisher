@@ -12,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gromit25.presspublisher.evaluator.RowColumnEval;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
@@ -126,7 +125,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 	}
 
 	@Override
-	public void formatExcel(XSSFWorkbook copy, Charset charset, ValueContainer values) throws FormatterException {
+	public void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
 		if(copy == null) {
@@ -155,7 +154,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			// worksheet에 cell의 위치를 가져옴
 			// baseCell이라고 이름지은 이유는
 			// cell 병합이 있을 경우, 여러 cell을 다루기 때문에 기준점 cell이라는 의미임
-			XSSFSheet sheet = copy.getSheetAt(copy.getActiveSheetIndex());
+			XSSFSheet sheet = copy.getWorksheet();
 			XSSFCell baseCell = ExcelUtil.getCell(sheet, rowPosition, columnPosition);
 			
 			////////////////////////////////////////////////////////////////

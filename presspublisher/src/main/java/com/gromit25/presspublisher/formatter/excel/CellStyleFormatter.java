@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.xml.sax.Attributes;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
@@ -24,7 +23,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="cellstyle")
-public class CellStyleFormatter extends AbstractExcelFormatter {
+public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
 	
 	/** value container의 cellstyle 목록의 이름 */
 	static String CELLSTYLE_BUNDLE_NAME = "_CELLSTYLE_BUNDLE_";
@@ -96,10 +95,10 @@ public class CellStyleFormatter extends AbstractExcelFormatter {
 	}
 	
 	@Override
-	protected void formatExcel(XSSFWorkbook copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatExcel(WorkbookFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// excel workbook에서 style 생성
-		XSSFCellStyle style = copy.createCellStyle();
+		XSSFCellStyle style = copy.getWorkbook().createCellStyle();
 		
 		// cell에 지정할 폰트 설정
 		@SuppressWarnings("unchecked")

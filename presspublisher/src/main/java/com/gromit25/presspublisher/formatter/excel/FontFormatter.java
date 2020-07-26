@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
@@ -22,7 +21,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="font")
-public class FontFormatter extends AbstractExcelFormatter {
+public class FontFormatter extends AbstractWorkbookSubComponentFormatter {
 	
 	static String FONT_BUNDLE_NAME = "_FONT_BUNDLE_";
 
@@ -63,10 +62,10 @@ public class FontFormatter extends AbstractExcelFormatter {
 	private boolean bold = false;
 	
 	@Override
-	protected void formatExcel(XSSFWorkbook copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatExcel(WorkbookFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// excel workbook에서 글꼴 생성
-		XSSFFont font = copy.createFont(); 
+		XSSFFont font = copy.getWorkbook().createFont(); 
 		
 		// 글꼴명 설정
 		if(this.getFontName() != null) {

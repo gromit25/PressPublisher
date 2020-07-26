@@ -8,25 +8,25 @@ import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
 /**
- * Excel의 Cell 출력용 Formatter의 추상 클래스
+ * Workbook의 하위 컴포넌트 Formatter의 추상 클래스
  * 
  * @author jmsohn
  */
-public abstract class AbstractExcelFormatter extends BasicFlowFormatter {
-
+public abstract class AbstractWorkbookSubComponentFormatter extends BasicFlowFormatter {
+	
 	/**
-	 * excel에 출력작업 수행
-	 * @param copy 출력 대상 WorksheetFormatter
+	 * excel의 workbook에 출력작업 수행
+	 * @param copy 출력 대상 WorkbookFormatter
 	 * @param charset 출력시 사용할 character set
 	 * @param values value container
 	 */
-	protected abstract void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values) throws FormatterException;
+	protected abstract void formatExcel(WorkbookFormatter copy, Charset charset, ValueContainer values) throws FormatterException;
 	
 	@Override
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 
 		try {
-			WorksheetFormatter copy = PublisherUtil.cast(copyObj, WorksheetFormatter.class);
+			WorkbookFormatter copy = PublisherUtil.cast(copyObj, WorkbookFormatter.class);
 			this.formatExcel(copy, charset, values);
 		} catch(FormatterException fex) {
 			throw fex;
@@ -35,5 +35,4 @@ public abstract class AbstractExcelFormatter extends BasicFlowFormatter {
 		}
 		
 	}
-
 }

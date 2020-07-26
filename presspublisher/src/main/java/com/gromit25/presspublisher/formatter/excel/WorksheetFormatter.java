@@ -3,13 +3,15 @@ package com.gromit25.presspublisher.formatter.excel;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.gromit25.presspublisher.common.PublisherUtil;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,35 +22,111 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="worksheet")
-public class WorksheetFormatter extends AbstractExcelFormatter {
+public class WorksheetFormatter extends BasicFlowFormatter {
 	
 	/** worksheet 명(필수) */
 	@Getter
 	@Setter
 	@FormatterAttr(name="name")
 	private String name;
+	
+	@Getter
+	@Setter(value=AccessLevel.PRIVATE)
+	private XSSFSheet worksheet;
+
+	/** 커서의 Row 위치(default 값 : 0) */
+	@Getter
+	private int cursorRowPosition = 0;
+	
+	/** 커서의 Column 위치(default 값 : 0) */
+	@Getter
+	private int cursorColumnPosition = 0;
 
 	@Override
-	public void formatExcel(XSSFWorkbook copy, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copy == null) {
+		if(copyObj == null) {
 			throw new FormatterException(this, "Copy Object is null");
+		}
+
+		// workbook formatter 설정
+		WorkbookFormatter workbook = null;
+		try {
+			workbook = PublisherUtil.cast(copyObj, WorkbookFormatter.class);
+		} catch(Exception ex) {
+			throw new FormatterException(this, ex);
 		}
 		
 		// 설정된 worksheet명으로 worksheet 생성 및 활성화 sheet(active sheet)로 설정
-		XSSFSheet sheet = copy.getSheet(this.getName());
+		// worksheet가 없을 경우, 새로 만듦
+		XSSFSheet sheet = workbook.getWorkbook().getSheet(this.getName());
 		if(sheet == null) {
-			sheet = copy.createSheet(this.getName());
+			sheet = workbook.getWorkbook().createSheet(this.getName());
 		}
+		this.setWorksheet(sheet);
 		
-		copy.setActiveSheet(copy.getSheetIndex(this.getName()));
+		workbook.getWorkbook().setActiveSheet(
+			workbook.getWorkbook().getSheetIndex(this.getName())
+		);
+		
+		System.out.println("#########################");
 		
 		// worksheet의 자식 formatter 수행
-		this.execChildFormatters(copy, charset, values);
+		this.execChildFormatters(this, charset, values);
 		
 		// 첫 worksheet로 active worksheet를 변경
-		copy.setActiveSheet(0);
+		workbook.getWorkbook().setActiveSheet(0);
+	}
+	
+	/**
+	 * 특정 위치로 커서를 설정
+	 * @param cursorRowPosition row 위치
+	 * @param cursorColumnPosition column 위치
+	 */
+	public void moveCursorAt(int cursorRowPosition, int cursorColumnPosition) {
+		this.setCursorRowPosition(cursorRowPosition);
+		this.setCursorColumnPosition(cursorColumnPosition);
+	}
+	
+	/**
+	 * 커서를 오른쪽으로 한칸 이동
+	 */
+	public void moveRightCursor() {
+		this.setCursorColumnPosition(this.getCursorColumnPosition() + 1);
+	}
+	
+	/**
+	 * 커서를 아래로 한칸 이동
+	 */
+	public void moveDownCursor() {
+		this.setCursorRowPosition(this.getCursorRowPosition() + 1);
+	}
+	
+	/**
+	 * 커서의 row 위치를 설정함
+	 *   설정할 row 위치가 0이하일 경우, 0으로 설정함
+	 * @param cursorRowPosition 설정할 row 위치
+	 */
+	public void setCursorRowPosition(int cursorRowPosition) {
+		if(cursorRowPosition < 0) {
+			this.cursorRowPosition = 0;
+		} else {
+			this.cursorRowPosition = cursorRowPosition;
+		}
+	}
+	
+	/**
+	 * 커서의 column 위치를 설정함
+	 *   설정할 column 위치가 0이하일 경우, 0으로 설정함
+	 * @param cursorColumnPosition 설정할 column 위치
+	 */
+	public void setCursorColumnPosition(int cursorColumnPosition) {
+		if(cursorColumnPosition < 0) {
+			this.cursorColumnPosition = 0;
+		} else {
+			this.cursorColumnPosition = cursorColumnPosition;
+		}
 	}
 
 }
