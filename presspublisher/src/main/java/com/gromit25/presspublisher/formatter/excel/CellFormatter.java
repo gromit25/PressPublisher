@@ -44,7 +44,8 @@ public class CellFormatter extends AbstractExcelFormatter {
 
 	/**
 	 * cell의 위치
-	 * rowColumn 표현 형식 사용, default값은 "0:0"
+	 * rowColumn 표현 형식 사용, defalut 값을 사용하지 않음
+	 * position이 설정되지 않으면, worksheet의 커서 위치를 사용함
 	 */
 	@Getter
 	@Setter
@@ -73,11 +74,12 @@ public class CellFormatter extends AbstractExcelFormatter {
 	/**
 	 * 자동 크기 설정
 	 * true/false 값 설정, cell 자동 size 조정 기능 설정
+	 * default값은 false
 	 */
 	@Getter
 	@Setter
 	@FormatterAttr(name="autoSizing", mandatory=false)
-	private boolean autoSizing;
+	private boolean autoSizing = false;
 	
 	/**
 	 * cellstyle 설정
@@ -93,7 +95,6 @@ public class CellFormatter extends AbstractExcelFormatter {
 	@Getter(value=AccessLevel.PRIVATE)
 	private TextFlowFormatter cellTextFormatter = new TextFlowFormatter();
 	
-	
 	/**
 	 * 생성자
 	 */
@@ -101,11 +102,11 @@ public class CellFormatter extends AbstractExcelFormatter {
 		
 		super();
 		
-		// default 값 설정
-		this.setPositionExpEval(RowColumnEval.compile("0:0", "0", "0"));
-		this.setSpanExpEval(RowColumnEval.compile("0:0", "0", "0"));
+		// Default 값 설정
+		// RowColumnEval.compile은 예외를 발생시키기 때문에,
+		// 생성자에서 Default 값을 설정함
 		this.setSizeExpEval(RowColumnEval.compile("0:0", "0", "0"));
-		this.setAutoSizing(false);
+		this.setSpanExpEval(RowColumnEval.compile("0:0", "0", "0"));
 	}
 	
 	@Override
@@ -145,11 +146,16 @@ public class CellFormatter extends AbstractExcelFormatter {
 			////////////////////////////////////////////////////////////////
 			// 1. 사용할 cell의 객체 가져옴 
 			
-			// row와 column 위치 표현식 수행 결과 설정
-			// 표현식 수행 결과는 항상 Double이기 때문에,
-			// Double로 캐스팅 후 다시 Integer 값을 가져옴
-			int rowPosition = this.getPositionExpEval().getRowEval().eval(values, Double.class).intValue();
-			int columnPosition = this.getPositionExpEval().getColumnEval().eval(values, Double.class).intValue();
+			// Cell 위치의 Default 값은 worksheet의 커서 위치
+			int rowPosition = copy.getCursorRowPosition();
+			int columnPosition = copy.getCursorColumnPosition();
+			
+			// 만일 설정된 Cell 위치(position)가 설정되어 있으면,
+			// 설정값으로 위치를 설정함
+			if(this.getPositionExpEval() != null) {
+				rowPosition = this.getPositionExpEval().evalRowValue(values);
+				columnPosition = this.getPositionExpEval().evalColumnValue(values);				
+			}
 			
 			// worksheet에 cell의 위치를 가져옴
 			// baseCell이라고 이름지은 이유는
@@ -157,9 +163,13 @@ public class CellFormatter extends AbstractExcelFormatter {
 			XSSFSheet sheet = copy.getWorksheet();
 			XSSFCell baseCell = ExcelUtil.getCell(sheet, rowPosition, columnPosition);
 			
+			// worksheet의  cursor 위치를 현재 Cell의 위치로 설정함
+			copy.setCursorPosition(rowPosition, columnPosition);
+			
 			////////////////////////////////////////////////////////////////
 			// 2. cell 표시될 메시지 생성 및 설정
 			
+			// cell에 표시될 메시지 변수
 			String message = "";
 			
 			// 설정된 text formatter를 수행하여,
@@ -178,8 +188,8 @@ public class CellFormatter extends AbstractExcelFormatter {
 			CellRangeAddress spanCellAddr = new CellRangeAddress(rowPosition, rowPosition, columnPosition, columnPosition);
 			
 			// row와 column 병합 범위 표현식 수행 결과 설정
-			int rowSpan = this.getSpanExpEval().getRowEval().eval(values, Double.class).intValue();;
-			int columnSpan = this.getSpanExpEval().getColumnEval().eval(values, Double.class).intValue();
+			int rowSpan = this.getSpanExpEval().evalRowValue(values);
+			int columnSpan = this.getSpanExpEval().evalColumnValue(values);
 			
 			// 수행 결과가 0 이상일때, 병합 수행
 			if(rowSpan > 0 || columnSpan > 0) {
@@ -196,7 +206,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			//        최종 column은 18 + (110%(4+1)) 즉, 18+2 = 20 픽셀이 설정됨
 			
 			// row 크기 계산하여 설정, 단위는 pixel
-			int rowSize = this.getSizeExpEval().getRowEval().eval(values, Double.class).intValue();
+			int rowSize = this.getSizeExpEval().evalRowValue(values);
 			if(rowSize > 0 && rowSpan >= 0) {
 				
 				int shareSize = rowSize / (rowSpan + 1);
@@ -218,7 +228,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			
 			// column 크기 계산하여 설정, 단위는 pixel
 			// ※ 상기 row pixel은 정확히 지정되나, column pixel은 근사치로 지정됨
-			int columnSize = this.getSizeExpEval().getColumnEval().eval(values, Double.class).intValue();
+			int columnSize = this.getSizeExpEval().evalColumnValue(values);
 			if(columnSize > 0 && columnSpan >= 0) {
 				
 				int shareSize = columnSize / (columnSpan + 1);
@@ -257,6 +267,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			// 6. cell style 설정
 			//    cell style 이름은 cell style 목록(CellStyleFormatter.CELLSTYLE_BUNDLE_NAME)에 있어야함
 			//    병합된 모든 cell에 대해 각각 적용
+			//
 			@SuppressWarnings("unchecked")
 			Hashtable<String, XSSFCellStyle> styles = values.get(CellStyleFormatter.CELLSTYLE_BUNDLE_NAME, Hashtable.class);
 			if(styles != null && this.getStyle() != null && styles.containsKey(this.getStyle())) {
@@ -271,6 +282,12 @@ public class CellFormatter extends AbstractExcelFormatter {
 					
 				}
 			}
+			
+			/////////////////////////////////////////////////////////////////
+			// 7. 후처리 
+			//    Worksheet의 Cursor를 다음 칸으로 이동 시킴
+			//
+			copy.moveCursorToNextPosition();
 			
 		} catch(FormatterException fex) {
 			throw fex;

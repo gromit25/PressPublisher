@@ -87,11 +87,14 @@ public class PublisherTest extends TestCase
     }
     
     /**
-     * 엑셀 파일로 출력 확인
+     * 엑셀 파일 출력 테스트
      */
     public void testPublishToExcel() {
     	
-    	try (OutputStream outExcel = new FileOutputStream(new File("D:\\testPublisher.xlsx"))){
+    	File outFile = new File("D:\\testPublish.xlsx");
+    	File formatFile = new File("resources/testExcelformat.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)){
     		
     		ArrayList<String> messages = new ArrayList<String>();
     		messages.add("test message 1");
@@ -100,7 +103,7 @@ public class PublisherTest extends TestCase
     		ValueContainer values = new ValueContainer();
     		values.put("messages", messages);
     		
-    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, new File("resources/testExcelformat.xml"));
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
     		publisher.publish(outExcel, Charset.defaultCharset(), values);
     		
     		assertTrue(true);
@@ -110,6 +113,35 @@ public class PublisherTest extends TestCase
     		ex.printStackTrace();
     		assertTrue(false);
     		
+    	}
+    }
+    
+    /**
+     * 커서를 사용한 엑셀 파일 출력 테스트
+     */
+    public void testPublishToExcelByUsingCursor() {
+    	
+    	File outFile = new File("D:\\testPublishByUsingCursor.xlsx");
+    	File formatFile = new File("resources/testExcelCursorformat.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ArrayList<String> messages = new ArrayList<String>();
+    		messages.add("test message 1");
+    		messages.add("test message 2");
+    		
+    		ValueContainer values = new ValueContainer();
+    		values.put("messages", messages);
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
     	}
     }
     

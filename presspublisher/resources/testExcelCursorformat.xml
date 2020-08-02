@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+
+	<font name="테이블컬럼명폰트" fontname="맑은 고딕" bold="true"/>
+	
+	<cellstyle name="테이블헤더스타일" font="테이블컬럼명폰트" wrap="true">
+		<border style="THIN" side="ALL" color="#000000"/>
+		<background color="#D9D9D9"/>
+		<alignment horizontal="CENTER" vertical="CENTER"/>
+	</cellstyle>
+	<cellstyle name="테이블데이터스타일">
+		<border style="THIN" side="ALL" color="#000000"/>
+	</cellstyle>
+
+	<worksheet name="test 입니다.">
+	
+		<cursor position="1:1"/>
+
+		<rowcells>
+			<cell size=":200" style="테이블헤더스타일">
+				|헤더1
+			</cell>
+			<cell size=":200" style="테이블헤더스타일">
+				|헤더2
+			</cell>
+		</rowcells>
+		<foreach element="message" listExp="messages">
+			<rowcells>
+				<cell style="테이블데이터스타일">
+					|column1:<print exp="message"/>
+				</cell>
+				<cell style="테이블데이터스타일">
+					|column2:<print exp="message"/>
+				</cell>
+			</rowcells>
+		</foreach>
+
+	</worksheet>
+	
+</workbook>

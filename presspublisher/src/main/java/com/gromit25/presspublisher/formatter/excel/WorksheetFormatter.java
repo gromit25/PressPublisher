@@ -41,6 +41,38 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	/** 커서의 Column 위치(default 값 : 0) */
 	@Getter
 	private int cursorColumnPosition = 0;
+	
+	/** 커서 이동 방향 enum */
+	public enum CursorDirection {
+		
+		// 아래 Cell로 이동
+		DOWN {
+			@Override
+			public void move(WorksheetFormatter worksheet) {
+				worksheet.setCursorRowPosition(worksheet.getCursorRowPosition() + 1);
+			}
+		},
+		
+		// 오른쪽 Cell로 이동
+		RIGHT {
+			@Override
+			public void move(WorksheetFormatter worksheet) {
+				worksheet.setCursorColumnPosition(worksheet.getCursorColumnPosition() + 1);
+			}
+		}; 
+		
+		/**
+		 * worksheet의 cursor를 특정 방향으로 한칸 이동시킴
+		 * 
+		 * @param worksheet cursor를 이동시킬 worksheet
+		 */
+		public abstract void move(WorksheetFormatter worksheet);
+	}
+	
+	/** Cell 등에 대해 처리 완료된 경우 자동으로 이동할 커서 이동 방향(default값 :DOWN)*/
+	@Getter
+	@Setter
+	private CursorDirection cursorDirection = CursorDirection.DOWN;
 
 	@Override
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
@@ -70,8 +102,6 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 			workbook.getWorkbook().getSheetIndex(this.getName())
 		);
 		
-		System.out.println("#########################");
-		
 		// worksheet의 자식 formatter 수행
 		this.execChildFormatters(this, charset, values);
 		
@@ -90,17 +120,20 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	}
 	
 	/**
-	 * 커서를 오른쪽으로 한칸 이동
+	 * 설정된 방향에 따라 커서를 이동시킴
 	 */
-	public void moveRightCursor() {
-		this.setCursorColumnPosition(this.getCursorColumnPosition() + 1);
+	public void moveCursorToNextPosition() {
+		this.getCursorDirection().move(this);
 	}
 	
 	/**
-	 * 커서를 아래로 한칸 이동
+	 * 커서의 위치를 설정함
+	 * @param rowPosition 설정할 row 위치
+	 * @param columnPosition 설정할 column 위치
 	 */
-	public void moveDownCursor() {
-		this.setCursorRowPosition(this.getCursorRowPosition() + 1);
+	public void setCursorPosition(int rowPosition, int columnPosition) {
+		this.setCursorRowPosition(rowPosition);
+		this.setCursorColumnPosition(columnPosition);
 	}
 	
 	/**
