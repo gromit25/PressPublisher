@@ -69,5 +69,41 @@ public class RowColumnEval {
 		
 		return eval;
 	}
+	
+	/**
+	 * row evaluator를 수행하여 row 값을 계산하여 반환
+	 * 
+	 * @param values value container
+	 * @return row position
+	 */
+	public int evalRowValue(ValueContainer values) throws Exception {
+		
+		// 설정된 row script의 값을 계산함
+		// 0보다 작으면, 0으로 설정
+		int rowValue = this.getRowEval().eval(values, Double.class).intValue();
+		if(rowValue < 0) {
+			rowValue = 0;
+		}
+		
+		return rowValue;
+	}
+	
+	/**
+	 * column evaluator를 수행하여 column 값을 계산하여 반환
+	 * 
+	 * @param values value container
+	 * @return column position
+	 */
+	public int evalColumnValue(ValueContainer values) throws Exception {
+
+		// 설정된 column script의 값을 계산함
+		// 0보다 작으면, 0으로 설정
+		int columnValue = this.getColumnEval().eval(values, Double.class).intValue();
+		if(columnValue < 0) {
+			columnValue = 0;
+		}
+		
+		return columnValue;
+	}
 
 }
