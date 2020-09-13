@@ -14,6 +14,7 @@ import com.gromit25.presspublisher.formatter.text.TextFlowFormatter;
  */
 public class ConsoleFormatterXmlHandler extends FormatterXmlHandler {
 	
+	/** console 출력에서 사용할 formatter의 group 목록들 */ 
 	private Set<String> formatterGroupNames;
 
 	/**
@@ -27,7 +28,8 @@ public class ConsoleFormatterXmlHandler extends FormatterXmlHandler {
 	protected Set<String> getFormatterGroupNames() {
 		
 		if(this.formatterGroupNames == null) {
-			
+
+			// console에 출력할때 사용할 formatter group들을 추가함
 			this.formatterGroupNames = new HashSet<String>();
 			this.formatterGroupNames.add("flow");
 			this.formatterGroupNames.add("text");

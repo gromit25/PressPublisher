@@ -15,6 +15,7 @@ import com.gromit25.presspublisher.formatter.text.TextFlowFormatter;
  */
 public class ExcelFormatterXmlHandler extends FormatterXmlHandler {
 	
+	/** 엑셀 출력에서 사용할 formatter의 group 목록들 */ 
 	private Set<String> formatterGroupNames;
 
 	/**
@@ -29,6 +30,7 @@ public class ExcelFormatterXmlHandler extends FormatterXmlHandler {
 		
 		if(this.formatterGroupNames == null) {
 			
+			// 엑세에 출력할때 사용할 formatter group들을 추가함
 			this.formatterGroupNames = new HashSet<String>();
 			this.formatterGroupNames.add("flow");
 			this.formatterGroupNames.add("text");

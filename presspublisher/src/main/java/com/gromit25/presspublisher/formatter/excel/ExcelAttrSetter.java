@@ -11,6 +11,11 @@ import com.gromit25.presspublisher.formatter.FormatterAttrSetter;
 import com.gromit25.presspublisher.formatter.FormatterAttrSetterClass;
 import com.gromit25.presspublisher.formatter.FormatterException;
 
+/**
+ * 엑셀 객체에 대한 XML 속성값(스트링)을 파싱하여 설정하는 클래스
+ * 
+ * @author jmsohn
+ */
 @FormatterAttrSetterClass
 public class ExcelAttrSetter {
 	

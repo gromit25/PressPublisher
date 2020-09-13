@@ -20,9 +20,13 @@ public class TextPublisher extends Publisher {
 	}
 
 	@Override
-	public void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception {
+	public void publish(Object out, Charset charset, ValueContainer values) throws Exception {
 		
-		try (TextFormatOutputStream textFormatOut = new TextFormatOutputStream(out)) {
+		if(false == (out instanceof OutputStream)) {
+			throw new Exception("output object is not OutputStream class.");
+		}
+		
+		try (TextFormatOutputStream textFormatOut = new TextFormatOutputStream((OutputStream)out)) {
 			this.getRootFormatter().format(textFormatOut, charset, values);
 		}
 	}

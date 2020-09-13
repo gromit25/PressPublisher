@@ -22,10 +22,15 @@ public class ExcelPublisher extends Publisher {
 	}
 
 	@Override
-	public void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception {
+	public void publish(Object out, Charset charset, ValueContainer values) throws Exception {
+		
+		if(false == (out instanceof OutputStream)) {
+			throw new Exception("output object is not OutputStream class.");
+		}
+		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		this.getRootFormatter().format(workbook, charset, values);
-		workbook.write(out);
+		workbook.write((OutputStream)out);
 	}
 
 }

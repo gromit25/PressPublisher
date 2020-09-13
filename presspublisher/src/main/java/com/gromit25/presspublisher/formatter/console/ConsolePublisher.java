@@ -3,7 +3,6 @@ package com.gromit25.presspublisher.formatter.console;
 import static org.fusesource.jansi.Ansi.ansi;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.fusesource.jansi.AnsiConsole;
@@ -25,7 +24,7 @@ public class ConsolePublisher extends TextPublisher {
 	}
 
 	@Override
-	public void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception {
+	public void publish(Object out, Charset charset, ValueContainer values) throws Exception {
 		
 		try(ByteArrayOutputStream outMessage = new ByteArrayOutputStream()) {
 

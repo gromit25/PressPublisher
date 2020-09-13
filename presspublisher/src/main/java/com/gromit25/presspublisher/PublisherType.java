@@ -10,6 +10,7 @@ import lombok.Setter;
 
 /**
  * publisher 종류
+ * 
  * @author jmsohn
  */
 public enum PublisherType {
@@ -35,6 +36,7 @@ public enum PublisherType {
 	
 	/**
 	 * 생성자 
+	 * 
 	 * @param name publisher 이름
 	 * @param concreteType 구체화된 publisher 클래스
 	 */
