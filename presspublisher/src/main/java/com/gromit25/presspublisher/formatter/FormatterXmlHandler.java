@@ -104,13 +104,13 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	 */
 	private void loadFormatterTypes(Reflections reflect) throws Exception {
 		
-		if(reflect == null) {
+		if(null == reflect) {
 			throw new Exception("reflect is null.");
 		}
 		
-		//
+		// 현재 출력에서 사용할 group 목록
 		Set<String> groupSet = this.getFormatterGroupNames();
-		if(groupSet == null) {
+		if(null == groupSet) {
 			return;
 		}
 		
@@ -119,12 +119,25 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			.getTypesAnnotatedWith(FormatterSpec.class)
 			.forEach(clazz -> {
 				
-				//
+				// 현재 클래스의 spec을 가져옴
 				FormatterSpec spec = clazz.getAnnotation(FormatterSpec.class);
 				
-				//
-				if(spec != null	&& groupSet.contains(spec.group()) == true) {
-					this.getFormatterTypes().put(spec.tag(), clazz);
+				// spec이 없거나, 사용할 group이 아닌 경우 스킵함
+				if(null == spec || false == groupSet.contains(spec.group())) {
+					return;
+				}
+				
+				// spec에 tag가 없거나 blank("")일 경우 스킵함
+				if(null == spec.tag() || true == spec.tag().trim().equals("")) {
+					return;
+				}
+				
+				// spec에 tag들에 현재 class를 처리할 Formatter로 설정함
+				// tag는 "data, category"형태로 다중 지정이 가능함
+				// -> 즉 하나의 formatter가 여러 tag를 처리하는 것이 가능함
+				String tags[] = spec.tag().split(",");
+				for(String tag : tags) { 
+					this.getFormatterTypes().put(tag.trim(), clazz);
 				}
 			});
 	}
@@ -136,7 +149,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	 */
 	private void loadFormatterAttrSetter(Reflections reflect) throws Exception {
 		
-		if(reflect == null) {
+		if(null == reflect) {
 			throw new Exception("reflect is null.");
 		}
 		
@@ -149,7 +162,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 				for(Method method : methods) {
 					
 					FormatterAttrSetter spec = method.getAnnotation(FormatterAttrSetter.class);
-					if(spec == null) {
+					if(null == spec) {
 						continue;
 					}
 					
@@ -162,7 +175,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	
 	@Override
 	public void setDocumentLocator(Locator locator) {
-		/** 현재 parsing 중인 위치 객체 설정 */
+		// 현재 parsing 중인 위치 객체 설정
 		this.setLocator(locator);
 	}
 	
