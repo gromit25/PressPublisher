@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet>
+
+		<cursor position="0:0"/>	
+		<rowcells>
+			<cell>|Russia</cell>
+			<cell>|Canada</cell>
+			<cell>|USA</cell>
+			<cell>|China</cell>
+			<cell>|Brazil</cell>
+			<cell>|Australia</cell>
+			<cell>|India</cell>
+		</rowcells>
+		<rowcells>
+			<cell>|17098242</cell>
+			<cell>|9984670</cell>
+			<cell>|9826675</cell>
+			<cell>|9596961</cell>
+			<cell>|8514877</cell>
+			<cell>|7741220</cell>
+			<cell>|3287263</cell>
+		</rowcells>
+		<rowcells>
+			<cell>|14590041</cell>
+			<cell>|35151728</cell>
+			<cell>|32993302</cell>
+			<cell>|14362887</cell>
+			<cell>|21172141</cell>
+			<cell>|25335727</cell>
+			<cell>|13724923</cell>
+		</rowcells>
+	
+		<line-chart type="LINE"
+			title="Area-wise Top Seven Countries"
+			range="4:0~26:7">
+		
+			<axes>
+				<category-axis name="x-axis" position="BOTTOM" type="CATEGORY" title="Country"/>
+				<value-axis name="y-axis" position="LEFT" type="VALUE" title="Area &amp; Population"/>
+			</axes>
+			
+			<series title="Area">
+				<category-ds range="0:0~0:6" type="STRING"/>
+				<value-ds range="1:0~1:6" type="NUMBER"/>
+			</series>
+			
+			<series title="Population">
+				<category-ds range="0:0~0:6" type="STRING"/>
+				<value-ds range="2:0~2:6" type="NUMBER"/>
+			</series>
+			
+		</line-chart>
+		
+	</worksheet>
+</workbook>

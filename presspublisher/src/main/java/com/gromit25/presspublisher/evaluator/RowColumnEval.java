@@ -20,6 +20,13 @@ public class RowColumnEval {
 	private Evaluator columnEval;
 	
 	/**
+	 * 생성자
+	 * compile 메소드를 통해서만 생성할 수 있도록 private으로 선언 
+	 */
+	private RowColumnEval() {
+	}
+	
+	/**
 	 * rowColumn 표현식을 compile함 
 	 * @param exp rowColumn 표현식
 	 * @param rowDefaultExp row의 default 표현식

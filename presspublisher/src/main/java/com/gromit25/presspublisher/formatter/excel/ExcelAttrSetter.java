@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xddf.usermodel.chart.AxisPosition;
+import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import com.gromit25.presspublisher.formatter.Formatter;
@@ -54,5 +56,33 @@ public class ExcelAttrSetter {
 			throw new FormatterException(formatter, ex);
 		}
 	}
+	
+	//
+	
+	@FormatterAttrSetter(ChartTypes.class)
+	public static void setChartTypes(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, ChartTypes.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
 
+	@FormatterAttrSetter(AxisPosition.class)
+	public static void setAxisPosition(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, AxisPosition.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+	
+	@FormatterAttrSetter(DataSourceTypes.class)
+	public static void setDataSourceTypes(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, DataSourceTypes.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
 }
