@@ -146,6 +146,28 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * 엑셀 Line Chart 출력 테스트
+     */
+    public void testPublishLineChartToExcel() {
+    	
+    	File outFile = new File("D:\\testPublishLineChart.xlsx");
+    	File formatFile = new File("resources/testExcelLineChart.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), new ValueContainer());
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * switch문 확인
      */
     public void testSwitch() {

@@ -6,13 +6,11 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xddf.usermodel.chart.XDDFDataSource;
 import org.apache.poi.xddf.usermodel.chart.XDDFNumericalDataSource;
 
-import com.gromit25.presspublisher.evaluator.RowColumnEval;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,16 +18,9 @@ import lombok.Setter;
 public class DataSourceFormatter extends AbstractChartComponent {
 	
 	@Getter
+	@Setter
 	@FormatterAttr(name="range", mandatory=true)
-	private String range;
-	
-	@Getter
-	@Setter(AccessLevel.PRIVATE)
-	private RowColumnEval startCell;
-	
-	@Getter
-	@Setter(AccessLevel.PRIVATE)
-	private RowColumnEval endCell;
+	private RangeEval range;
 	
 	@Getter
 	@Setter
@@ -54,10 +45,10 @@ public class DataSourceFormatter extends AbstractChartComponent {
 		int endColumn = 0;
 		
 		try {
-			startRow = this.getStartCell().evalRowValue(values);
-			startColumn = this.getStartCell().evalColumnValue(values);
-			endRow = this.getEndCell().evalRowValue(values);
-			endColumn = this.getEndCell().evalColumnValue(values);
+			startRow = this.getRange().evalStartRow(values);
+			startColumn = this.getRange().evalStartColumn(values);
+			endRow = this.getRange().evalEndRow(values);
+			endColumn = this.getRange().evalEndColumn(values);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
@@ -79,27 +70,4 @@ public class DataSourceFormatter extends AbstractChartComponent {
 		}
 
 	}
-	
-	/**
-	 * 
-	 * @param range
-	 */
-	public void setRange(String range) throws Exception {
-		
-		if(null == range || true == range.trim().equals("")) {
-			throw new Exception("range value is null or blank.");
-		}
-		
-		// 범위의 형식을 시작셀 위치와 종료셀 위치를 분리함
-		// ex) 0:0~2:3 -> 시작셀 위치 0:0, 종료셀 위치 2:3
-		String[] splitedRange = range.split("~");
-		if(2 != splitedRange.length) {
-			throw new Exception("range value is invalid:" + range);
-		}
-		
-		this.setRange(range);
-		this.setStartCell(RowColumnEval.compile(splitedRange[0], "0", "0"));
-		this.setEndCell(RowColumnEval.compile(splitedRange[1], "0", "0"));
-	}
-
 }

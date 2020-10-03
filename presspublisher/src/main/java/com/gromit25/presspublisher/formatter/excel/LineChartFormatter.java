@@ -9,7 +9,6 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
-import com.gromit25.presspublisher.evaluator.RowColumnEval;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
@@ -32,30 +31,34 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 	 * 
 	 */
 	@Getter
+	@Setter
 	@FormatterAttr(name="range", mandatory = true)
-	private String range;
-	
-	@Getter
-	@Setter(AccessLevel.PRIVATE)
-	private RowColumnEval startCell;
-	
-	@Getter
-	@Setter(AccessLevel.PRIVATE)
-	private RowColumnEval endCell;
+	private RangeEval range;
 	
 	@Getter
 	@Setter
 	@FormatterAttr(name="title", mandatory = false)
 	private String title;
 	
+	/**
+	 * 현재의 worksheet
+	 * 하위 컴포넌트에서 사용됨
+	 */
 	@Getter
 	@Setter(AccessLevel.PRIVATE)
 	private XSSFSheet worksheet;
 	
+	/**
+	 * 생성할 chart 객체
+	 */
 	@Getter
 	@Setter(AccessLevel.PRIVATE)
 	private XSSFChart chart;
 	
+	/**
+	 * chart 객체에 표시할 chart data 객체
+	 * 하위 컴포넌트에서 사용됨
+	 */
 	@Getter
 	@Setter(AccessLevel.PACKAGE)
 	private XDDFChartData chartData;
@@ -75,7 +78,7 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 		//
 		this.setWorksheet(copy.getWorksheet());
 		
-		// 1.
+		// 1. chart 객체를 생성함
 		int startRow = 0;
 		int startColumn = 0;
 		int endRow = 0;
@@ -83,11 +86,11 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 
 		try {
 			
-			startRow = this.getStartCell().evalRowValue(values);
-			startColumn = this.getStartCell().evalColumnValue(values);
+			startRow = this.getRange().evalStartRow(values);
+			startColumn = this.getRange().evalStartColumn(values);
 			
-			endRow = this.getEndCell().evalRowValue(values);
-			endColumn = this.getEndCell().evalColumnValue(values);
+			endRow = this.getRange().evalEndRow(values);
+			endColumn = this.getRange().evalEndColumn(values);
 			
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
@@ -103,26 +106,6 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 		this.execChildFormatters(this, charset, values);
 		
 		// 3.
+		this.getChart().plot(this.getChartData());
 	}
-	
-	/**
-	 * 
-	 * @param range
-	 */
-	public void setRange(String range) throws Exception {
-		
-		if(null == range || true == range.trim().equals("")) {
-			throw new Exception("range value is null or blank");
-		}
-		
-		String[] splitedRange = range.split("~");
-		if(2 != splitedRange.length) {
-			throw new Exception("range value is invalid:" + range);
-		}
-		
-		this.setRange(range);
-		this.setStartCell(RowColumnEval.compile(splitedRange[0], "0", "0"));
-		this.setEndCell(RowColumnEval.compile(splitedRange[1], "0", "0"));
-	}
-	
 }

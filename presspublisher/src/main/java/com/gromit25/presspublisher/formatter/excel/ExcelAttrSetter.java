@@ -2,6 +2,7 @@ package com.gromit25.presspublisher.formatter.excel;
 
 import java.lang.reflect.Method;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
@@ -30,6 +31,15 @@ public class ExcelAttrSetter {
 		}
 	}
 	
+	@FormatterAttrSetter(CellType.class)
+	public static void setCellType(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, CellType.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+	
 	@FormatterAttrSetter(HorizontalAlignment.class)
 	public static void setHorizontalAlignment(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
 		try {
@@ -52,6 +62,16 @@ public class ExcelAttrSetter {
 	public static void setXSSFColor(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
 		try {
 			setMethod.invoke(formatter, ExcelUtil.getColor(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+
+	@FormatterAttrSetter(RangeEval.class)
+	public static void setRangeEval(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			RangeEval range = RangeEval.create(attrValue);
+			setMethod.invoke(formatter, range);
 		} catch(Exception ex) {
 			throw new FormatterException(formatter, ex);
 		}

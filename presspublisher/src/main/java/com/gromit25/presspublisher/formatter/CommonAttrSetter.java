@@ -3,7 +3,7 @@ package com.gromit25.presspublisher.formatter;
 import java.lang.reflect.Method;
 
 import com.gromit25.presspublisher.evaluator.Evaluator;
-import com.gromit25.presspublisher.evaluator.RowColumnEval;
+import com.gromit25.presspublisher.formatter.excel.RowColumnEval;
 
 /**
  * 자바의 기본타입(primitive type) 또는 공통적으로 사용되는 타입(ex. Evaluator)에 대한

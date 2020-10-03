@@ -14,7 +14,6 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
-import com.gromit25.presspublisher.evaluator.RowColumnEval;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterAttr;

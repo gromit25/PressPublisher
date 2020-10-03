@@ -77,7 +77,7 @@ public class AxesFormatter extends AbstractChartComponent {
 			throw new FormatterException(this, "value-axis is not found.");
 		}
 		
-		// chartData 생성 및 설정
+		// chart data 생성 및 설정
 		XDDFChartData chartData = copy.getChart().createData(
 				copy.getType(), this.getCategoryAxis(), this.getValueAxis());   
 		copy.setChartData(chartData);

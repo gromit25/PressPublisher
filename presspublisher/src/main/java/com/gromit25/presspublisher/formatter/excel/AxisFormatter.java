@@ -19,18 +19,8 @@ public class AxisFormatter extends AbstractChartComponent {
 	
 	@Getter
 	@Setter
-	@FormatterAttr(name="name", mandatory = true)
-	private String name;
-	
-	@Getter
-	@Setter
 	@FormatterAttr(name="position", mandatory = true)
 	private AxisPosition position;
-	
-	@Getter
-	@Setter
-	@FormatterAttr(name="type", mandatory = true)
-	private AxisTypes type;
 	
 	@Getter
 	@Setter
@@ -50,19 +40,18 @@ public class AxisFormatter extends AbstractChartComponent {
 			
 			AxesFormatter copy = (AxesFormatter)copyObj;
 			
-			//
-			XDDFChartAxis axis = this.getType().createAxis(copy.getChart(), this.getPosition());
-			
 			// category-axis인지, value-axis인지에 따라
 			// 설정을 함
 			if(true == this.getTagName().equals("category-axis")) {
+				
+				XDDFChartAxis axis = copy.getChart().createCategoryAxis(this.getPosition());
 				copy.setCategoryAxis(axis);
+				
 			} else if(true == this.getTagName().equals("value-axis")) {
-				if(axis instanceof XDDFValueAxis) {
-					copy.setValueAxis((XDDFValueAxis)axis);
-				} else {
-					throw new FormatterException(this, "value-axis is not NUMBER type.");
-				}
+				
+				XDDFValueAxis axis = copy.getChart().createValueAxis(this.getPosition());
+				copy.setValueAxis((XDDFValueAxis)axis);
+				
 			} else {
 				throw new FormatterException(this, "unknown axis type:" + this.getTagName());
 			}
