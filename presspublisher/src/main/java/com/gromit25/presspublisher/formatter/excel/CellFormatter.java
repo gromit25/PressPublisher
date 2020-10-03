@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.Units;
@@ -88,6 +89,14 @@ public class CellFormatter extends AbstractExcelFormatter {
 	@Setter
 	@FormatterAttr(name="style", mandatory=false)
 	private String style;
+	
+	/**
+	 * cell의 type 설정
+	 */
+	@Getter
+	@Setter
+	@FormatterAttr(name="type", mandatory=false)
+	private CellType type;
 
 	/**
 	 * cell에 표시될 텍스트를 생성하는 formatter
@@ -167,10 +176,16 @@ public class CellFormatter extends AbstractExcelFormatter {
 			copy.setCursorPosition(rowPosition, columnPosition);
 			
 			////////////////////////////////////////////////////////////////
-			// 2. cell 표시될 메시지 생성 및 설정
+			// 2. cell type 설정
+			//    cell 표시될 메시지 생성 및 설정
 			
 			// cell에 표시될 메시지 변수
 			String message = "";
+			
+			// cell type 설정
+			if(null != this.getType()) {
+				baseCell.setCellType(this.getType());
+			}
 			
 			// 설정된 text formatter를 수행하여,
 			// cell에 표시될 text를 설정함
@@ -178,7 +193,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 				this.getCellTextFormatter().format(messageOut, charset, values);
 				message = messageOut.toString();
 			}
-			baseCell.setCellValue(message);
+			CellFormatter.setValueToCell(baseCell, this.getType(), message);
 	
 			////////////////////////////////////////////////////////////////
 			// 3. cell 병합 작업 수행
@@ -299,7 +314,45 @@ public class CellFormatter extends AbstractExcelFormatter {
 		// 등록 되어 있기 때문에 CellFormatter의 자식 Formatter를 수행할 
 		// 필요가 없다. 
 		// cellTextFormatter는 formatExcel 메소드 진입부에서 이미 수행함
-		//this.execChildFormatters(copy, charset, values);
+		// this.execChildFormatters(copy, charset, values);
+	}
+	
+	/**
+	 * cell type별로 value를 변환하여 cell value에 설정함
+	 * @param cell 설정할 cell object
+	 * @param type cell의 type
+	 * @param value 설정할 value
+	 */
+	private static void setValueToCell(XSSFCell cell, CellType type, String value) throws Exception {
+		
+		// 입력값 검증 및 디폴트 설정
+		if(null == cell) {
+			throw new Exception("cell object is null.");
+		}
+		
+		if(null == type) {
+			type = CellType.STRING;
+		}
+		
+		if(null == value) {
+			value = "";
+		}
+		
+		// 각 타입별로 셀에 설정
+		switch(type) {
+		case NUMERIC:
+			cell.setCellValue(Double.parseDouble(value));
+			break;
+		case BOOLEAN:
+			cell.setCellValue(Boolean.parseBoolean(value));
+			break;
+		case FORMULA:
+			cell.setCellFormula(value);
+			break;
+		default:
+			cell.setCellValue(value);
+			break;
+		}
 	}
 
 }
