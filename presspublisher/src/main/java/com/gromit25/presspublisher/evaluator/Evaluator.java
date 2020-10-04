@@ -18,9 +18,13 @@ import lombok.Setter;
  */
 public class Evaluator {
 	
+	@Getter
+	@Setter(AccessLevel.PRIVATE)
+	private String script;
+	
 	/** script를 컴파일한 명령어 목록 */
-	@Getter(value = AccessLevel.PRIVATE)
-	@Setter(value = AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private ArrayList<EvalCmd> cmds = new ArrayList<EvalCmd>();
 	
 	/**
@@ -45,6 +49,9 @@ public class Evaluator {
 		// 새로 생성된 evaluator 객체의 명령어(cmds) 목록에 추가하는 방식
 		Reader reader = new StringReader(script);
 		Parser.compile(reader, eval.getCmds());
+		
+		// 원본 script 설정함
+		eval.setScript(script);
 		
 		return eval;
 	}

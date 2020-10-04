@@ -28,20 +28,14 @@ public class MapToListFormatter extends AbstractFlowFormatter {
 	/** value container에 설정할 이름 */
 	@Getter
 	@Setter
-	@FormatterAttr(name="name")
+	@FormatterAttr(name="name", mandatory=true)
 	private String name;
-	
-	/** 변환할 map 스크립트  */
-	@Getter
-	@Setter
-	@FormatterAttr(name="mapExp")
-	private String mapExp;
 	
 	/** 변환할 map 스크립트 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="mapExp")
-	private Evaluator mapExpEval;
+	@FormatterAttr(name="mapExp", mandatory=true)
+	private Evaluator mapExp;
 
 	/** List로 변환시 sorting 기준 클래스 */
 	@Getter
@@ -98,13 +92,13 @@ public class MapToListFormatter extends AbstractFlowFormatter {
 		// 1. map 객체를 가져옴
 		Object mapObj = null;
 		try {
-			mapObj = this.getMapExpEval().eval(values, Object.class);
+			mapObj = this.getMapExp().eval(values, Object.class);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
 		
 		if(mapObj == null || (mapObj instanceof Map) == false) {
-			throw new FormatterException(this, "N/A(" + this.getMapExp() + " is not Map Object)");
+			throw new FormatterException(this, "N/A(" + this.getMapExp().getScript() + " is not Map Object)");
 		}
 		
 		// 위에서 Map 타입 체크하였기 때문에 suppress 시킴

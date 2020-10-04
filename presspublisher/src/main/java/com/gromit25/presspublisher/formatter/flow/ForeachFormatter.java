@@ -36,22 +36,16 @@ public class ForeachFormatter extends AbstractSubFlowFormatter {
 	/** foreach loop의 index명을 만들때 element명의 전치문구 */
 	private static String INDEX_PRE = "_index_";
 	
-	/** listExp 속성  */
-	@Getter
-	@Setter
-	@FormatterAttr(name="listExp")
-	private String listExp;
-	
 	/** listExp 속성 수행하기 위한 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="listExp")
-	private Evaluator listExpEval;
+	@FormatterAttr(name="listExp", mandatory=true)
+	private Evaluator listExp;
 	
 	/** element 속성의 설정값 */
 	@Getter
 	@Setter
-	@FormatterAttr(name="element")
+	@FormatterAttr(name="element", mandatory=true)
 	private String element;
 	
 	/** list의 element가 없을 경우 수행할 대체(alt) FlowFormatter */
@@ -89,13 +83,13 @@ public class ForeachFormatter extends AbstractSubFlowFormatter {
 		Object obj = null;
 		
 		try {
-			obj = this.getListExpEval().eval(values, Object.class);
+			obj = this.getListExp().eval(values, Object.class);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
 		
 		if(obj == null || (obj instanceof List) == false) {
-			throw new FormatterException(this, "N/A(" + this.getListExp() + " is not List Object)");
+			throw new FormatterException(this, "N/A(" + this.getListExp().getScript() + " is not List Object)");
 		}
 		
 		// list의 값을 하나씩 설정하여 수행함

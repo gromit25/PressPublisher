@@ -26,17 +26,11 @@ import lombok.Setter;
 @FormatterSpec(group="flow", tag="if")
 public class IfFormatter extends AbstractSubFlowFormatter {
 	
-	/** if문의 exp속성(script) */
-	@Getter
-	@Setter
-	@FormatterAttr(name="exp")
-	private String ifExp;
-	
 	/** if문 수행 여부를 확인 하기 위한 스크립트 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="exp")
-	private Evaluator ifEval;
+	@FormatterAttr(name="exp", mandatory=true)
+	private Evaluator exp;
 
 	@Override
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
@@ -54,7 +48,7 @@ public class IfFormatter extends AbstractSubFlowFormatter {
 			
 			// if 문 설정된 script의 수행결과가
 			// TRUE 이면, basic flow를 수행함
-			Boolean condition = this.getIfEval().eval(values, Boolean.class);
+			Boolean condition = this.getExp().eval(values, Boolean.class);
 			
 			if(condition == true) {
 				this.getBasicFlowFormatter().format(copyObj, charset, values);

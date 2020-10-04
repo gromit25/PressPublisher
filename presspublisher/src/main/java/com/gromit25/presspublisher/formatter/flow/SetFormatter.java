@@ -36,20 +36,14 @@ public class SetFormatter extends AbstractFlowFormatter {
 	/** value container에 설정할 이름 */
 	@Getter
 	@Setter
-	@FormatterAttr(name="name")
+	@FormatterAttr(name="name", mandatory=true)
 	private String name;
 
-	/** value container에 추가할 값을 연산하기 위한 스크립트 */
-	@Getter
-	@Setter
-	@FormatterAttr(name="exp")
-	private String exp;
-	
 	/** value container에 추가할 값을 연산하기 위한 스크립트 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="exp")
-	private Evaluator expEval;
+	@FormatterAttr(name="exp", mandatory=true)
+	private Evaluator exp;
 
 	@Override
 	public void addText(String text) throws FormatterException {
@@ -76,7 +70,7 @@ public class SetFormatter extends AbstractFlowFormatter {
 		// exp에 설정된 operation을 수행 후 결과를
 		// value container에 설정할 이름(SetFormatter.name)으로 넣음
 		try {
-			values.put(this.getName(), this.getExpEval().eval(values, Object.class));
+			values.put(this.getName(), this.getExp().eval(values, Object.class));
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}

@@ -26,17 +26,11 @@ import lombok.Setter;
 @FormatterSpec(group="flow", tag="while")
 public class WhileFormatter extends AbstractSubFlowFormatter {
 	
-	/** while문의 exp속성(script) */
-	@Getter
-	@Setter
-	@FormatterAttr(name="exp")
-	private String whileExp;
-	
 	/** while문 수행 여부를 확인 하기 위한 스크립트 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="exp")
-	private Evaluator whileExpEval;
+	@FormatterAttr(name="exp", mandatory=true)
+	private Evaluator exp;
 	
 	@Override
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
@@ -54,7 +48,7 @@ public class WhileFormatter extends AbstractSubFlowFormatter {
 			
 			// 설정된 조건이 TRUE 이면,
 			// while문을 계속 수행함
-			while(this.getWhileExpEval().eval(values, Boolean.class) == true) {
+			while(this.getExp().eval(values, Boolean.class) == true) {
 				this.getBasicFlowFormatter().format(copyObj, charset, values);
 			}
 			

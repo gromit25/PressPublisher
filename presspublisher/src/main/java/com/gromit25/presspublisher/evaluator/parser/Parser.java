@@ -23,7 +23,6 @@ public class Parser {
 	public static void compile(Reader reader, ArrayList<EvalCmd> cmds) throws Exception {
 		
 		PushbackReader pushbackReader = new PushbackReader(reader, BUFFER_SIZE);
-		//BooleanParser.compile(pushbackReader, cmds);
 		AssignParser.compile(pushbackReader, cmds);
 		
 	}

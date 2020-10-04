@@ -26,17 +26,11 @@ import lombok.Setter;
 @FormatterSpec(group="text", tag="print")
 public class PrintFormatter extends AbstractTextFormatter {
 	
-	/** 수행할 표현식 */
-	@Getter
-	@Setter
-	@FormatterAttr(name="exp")
-	private String exp;
-	
 	/** 표현식(exp)의 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="exp")
-	private Evaluator expEval;
+	@FormatterAttr(name="exp", mandatory=true)
+	private Evaluator exp;
 	
 	/**
 	 * 출력 길이
@@ -73,15 +67,11 @@ public class PrintFormatter extends AbstractTextFormatter {
 			throw new FormatterException(this, "Value Container is null");
 		}
 		
-		if(this.getExp() == null) {
-			throw new FormatterException(this, "expression(exp) is null");
-		}
-		
 		// 표현식(exp)을 수행한 후
 		// 수행 결과 값을 반환함
 		try {
 			
-			Object result = this.getExpEval().eval(values, Object.class);
+			Object result = this.getExp().eval(values, Object.class);
 			
 			// 수행 결과를 메세지에 설정함
 			if(result != null) {

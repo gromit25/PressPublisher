@@ -24,31 +24,25 @@ import lombok.Setter;
  */
 @FormatterSpec(group="flow", tag="switch")
 public class SwitchFormatter extends AbstractFlowFormatter {
-	
-	/** switch 분기를 위한 값을 얻어오기 위한 스크립트 */
-	@Getter
-	@Setter
-	@FormatterAttr(name="exp")
-	private String switchExp;
 
 	/** switch 분기를 위한 값을 얻어오기 위한 스크립트 Evaluator */
 	@Getter
 	@Setter
-	@FormatterAttr(name="exp")
-	private Evaluator switchExpEval;
+	@FormatterAttr(name="exp", mandatory=true)
+	private Evaluator switchExp;
 	
 	/**
 	 * 분기를 위한 case formatter 맵
 	 * key : case 테그의 value 값(정규표현식)
 	 * value : caseFormatter
 	 */
-	@Getter(value=AccessLevel.PRIVATE)
-	@Setter(value=AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private HashMap<String, CaseFormatter> caseFormatterMap = new HashMap<String, CaseFormatter>();
 
 	/** default 분기를 위한 default formatter */
-	@Getter(value=AccessLevel.PRIVATE)
-	@Setter(value=AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private DefaultFormatter defaultFormatter;
 
 	@Override
@@ -83,7 +77,7 @@ public class SwitchFormatter extends AbstractFlowFormatter {
 		// 1. switch 문의 내용을 수행하여, 수행결과를 가지고 옴
 		Object condition = null;
 		try {
-			condition = this.getSwitchExpEval().eval(values, Object.class);
+			condition = this.getSwitchExp().eval(values, Object.class);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
