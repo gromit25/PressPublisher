@@ -40,12 +40,12 @@
 				<value-axis position="LEFT" title="Area &amp; Population"/>
 			</axes>
 			
-			<series title="Area">
+			<series title="Area" smooth="false" mark-style="STAR">
 				<category-ds range="0:0~0:6" type="STRING"/>
 				<value-ds range="1:0~1:6" type="NUMBER"/>
 			</series>
 			
-			<series title="Population">
+			<series title="Population" smooth="true" mark-style="SQUARE" mark-size="6">
 				<category-ds range="0:0~0:6" type="STRING"/>
 				<value-ds range="2:0~2:6" type="NUMBER"/>
 			</series>

@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
+import org.apache.poi.xddf.usermodel.chart.MarkerStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import com.gromit25.presspublisher.formatter.Formatter;
@@ -22,10 +23,19 @@ import com.gromit25.presspublisher.formatter.FormatterException;
 @FormatterAttrSetterClass
 public class ExcelAttrSetter {
 	
-	@FormatterAttrSetter(String.class)
-	public static void setString(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+	//
+	
+	/**
+	 * RowColumnEval type의 속성 설정 메서드
+	 *   FormatterAttrSetter 어노테이션 주석 참조
+	 * @param formatter 속성을 지정할 formatter 객체
+	 * @param setMethod formatter의 속성값 setMethod
+	 * @param attrValue formatter에 설정할 속성의 문자열값
+	 */
+	@FormatterAttrSetter(RowColumnEval.class)
+	public static void setRowColumnEval(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
 		try {
-			setMethod.invoke(formatter, attrValue);
+			setMethod.invoke(formatter, RowColumnEval.compile(attrValue, "0", "0"));
 		} catch(Exception ex) {
 			throw new FormatterException(formatter, ex);
 		}
@@ -101,6 +111,15 @@ public class ExcelAttrSetter {
 	public static void setDataSourceTypes(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
 		try {
 			setMethod.invoke(formatter, DataSourceTypes.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+
+	@FormatterAttrSetter(MarkerStyle.class)
+	public static void setMarkerStyle(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, MarkerStyle.valueOf(attrValue));
 		} catch(Exception ex) {
 			throw new FormatterException(formatter, ex);
 		}

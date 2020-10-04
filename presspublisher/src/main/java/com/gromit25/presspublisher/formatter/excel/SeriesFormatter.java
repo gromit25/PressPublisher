@@ -2,8 +2,10 @@ package com.gromit25.presspublisher.formatter.excel;
 
 import java.nio.charset.Charset;
 
+import org.apache.poi.xddf.usermodel.chart.MarkerStyle;
 import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
 import org.apache.poi.xddf.usermodel.chart.XDDFDataSource;
+import org.apache.poi.xddf.usermodel.chart.XDDFLineChartData;
 import org.apache.poi.xddf.usermodel.chart.XDDFNumericalDataSource;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -24,6 +26,21 @@ public class SeriesFormatter extends AbstractChartComponent {
 	@Setter
 	@FormatterAttr(name="title", mandatory=false)
 	private String title;
+	
+	@Getter
+	@Setter
+	@FormatterAttr(name="smooth", mandatory=false)
+	private Boolean smooth;
+	
+	@Getter
+	@Setter
+	@FormatterAttr(name="mark-style", mandatory=false)
+	private MarkerStyle markStyle;
+	
+	@Getter
+	@Setter
+	@FormatterAttr(name="mark-size", mandatory=false)
+	private Short markSize;
 	
 	/**
 	 * 현재 worksheet 객체
@@ -81,10 +98,32 @@ public class SeriesFormatter extends AbstractChartComponent {
 			XDDFChartData.Series series =
 					copy.getChartData().addSeries(this.getCategoryDS(), this.getValueDS());
 			
+			// title 설정
 			// title이 null이 아니고 blank가 아닐때,
 			// series에 title 설정
-			if(this.getTitle() != null && false == this.getTitle().trim().equals("")) {
+			if(null != this.getTitle() && false == this.getTitle().trim().equals("")) {
 				series.setTitle(this.getTitle(), null);
+			}
+
+			// Line Chart 일 경우 설정
+			if(series instanceof XDDFLineChartData.Series) {
+				
+				XDDFLineChartData.Series lineSeries = (XDDFLineChartData.Series)series;
+				
+				// smooth 설정
+				if(null != this.getSmooth()) {
+					lineSeries.setSmooth(this.getSmooth());
+				}
+				
+				// mark style 설정
+				if(null != this.getMarkStyle()) {
+					lineSeries.setMarkerStyle(this.getMarkStyle());
+				}
+				
+				// mark size 설정
+				if(null != this.getMarkSize()) {
+					lineSeries.setMarkerSize(this.getMarkSize());
+				}
 			}
 			
 		} catch(Exception ex) {

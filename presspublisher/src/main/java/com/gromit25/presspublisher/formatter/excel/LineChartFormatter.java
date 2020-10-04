@@ -75,7 +75,7 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 	@Override
 	protected void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
 		
-		//
+		// 현재 worksheet 설정
 		this.setWorksheet(copy.getWorksheet());
 		
 		// 1. chart 객체를 생성함
@@ -105,7 +105,7 @@ public class LineChartFormatter extends AbstractExcelFormatter {
 		// 2. 차트 컴포넌트를 설정함(axis, series 등) 
 		this.execChildFormatters(this, charset, values);
 		
-		// 3.
+		// 3. 설정된 차트를 엑셀에 출력함
 		this.getChart().plot(this.getChartData());
 	}
 }
