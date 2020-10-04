@@ -27,11 +27,11 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	/** worksheet 명(필수) */
 	@Getter
 	@Setter
-	@FormatterAttr(name="name")
+	@FormatterAttr(name="name", mandatory=true)
 	private String name;
 	
 	@Getter
-	@Setter(value=AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private XSSFSheet worksheet;
 
 	/** 커서의 Row 위치(default 값 : 0) */

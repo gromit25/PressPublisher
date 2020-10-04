@@ -28,7 +28,7 @@ public class FontFormatter extends AbstractWorkbookSubComponentFormatter {
 	/** value container의 글꼴목록에 설정할 이름 */
 	@Getter
 	@Setter
-	@FormatterAttr(name="name")
+	@FormatterAttr(name="name", mandatory=true)
 	private String name;
 	
 	/** 글꼴 명 */

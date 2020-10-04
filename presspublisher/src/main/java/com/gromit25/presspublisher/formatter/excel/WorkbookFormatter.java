@@ -22,7 +22,10 @@ import lombok.Setter;
 @FormatterSpec(group="excel", tag="workbook")
 public class WorkbookFormatter extends BasicFlowFormatter {
 	
-	/** 작업 workbook */
+	/**
+	 * 현재 workbook
+	 * 하위 formatter에서 사용함
+	 */
 	@Getter
 	@Setter(value=AccessLevel.PRIVATE)
 	private XSSFWorkbook workbook;

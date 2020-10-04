@@ -66,7 +66,7 @@ public class DataSourceFormatter extends AbstractChartComponent {
 				throw new FormatterException(this, "value-ds is not NUMBER type.");
 			}
 		} else {
-			throw new FormatterException(this, "unknown tag name:" + this.getTagName());
+			throw new FormatterException(this, "unexpected tag name:" + this.getTagName());
 		}
 
 	}
