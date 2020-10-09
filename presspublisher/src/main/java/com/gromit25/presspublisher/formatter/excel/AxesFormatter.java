@@ -57,12 +57,12 @@ public class AxesFormatter extends AbstractChartComponent {
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 		
 		//
-		if(false == (copyObj instanceof LineChartFormatter)) {
+		if(false == (copyObj instanceof ChartFormatter)) {
 			throw new FormatterException(this, "Invalid Formatter(LineChartFormatter expected).");
 		}
 		
 		//
-		LineChartFormatter copy = (LineChartFormatter)copyObj;
+		ChartFormatter copy = (ChartFormatter)copyObj;
 		this.setChart(copy.getChart());
 		
 		// category-axis와 value-axis를 설정함

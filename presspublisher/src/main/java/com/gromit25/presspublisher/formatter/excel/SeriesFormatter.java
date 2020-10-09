@@ -80,7 +80,7 @@ public class SeriesFormatter extends AbstractChartComponent {
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 		
 		//
-		if(false == (copyObj instanceof LineChartFormatter)) {
+		if(false == (copyObj instanceof ChartFormatter)) {
 			throw new FormatterException(this, "Invalid Formatter(LineChartFormatter expected).");
 		}
 		
@@ -88,7 +88,7 @@ public class SeriesFormatter extends AbstractChartComponent {
 		try {
 			
 			// 1.
-			LineChartFormatter copy = (LineChartFormatter)copyObj;
+			ChartFormatter copy = (ChartFormatter)copyObj;
 			this.setWorksheet(copy.getWorksheet());
 			
 			// 2. categoryDS, dataDS를 하위 컴포넌트(category, data)에서 설정함
