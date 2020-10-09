@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @FormatterSpec(group="excel", tag="line-chart")
-public class LineChartFormatter extends AbstractExcelFormatter {
+public class ChartFormatter extends AbstractExcelFormatter {
 	
 	@Getter
 	@Setter
