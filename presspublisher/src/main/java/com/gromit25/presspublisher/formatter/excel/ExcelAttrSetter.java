@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
+import org.apache.poi.xddf.usermodel.chart.BarDirection;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.MarkerStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -121,6 +122,15 @@ public class ExcelAttrSetter {
 	public static void setMarkerStyle(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
 		try {
 			setMethod.invoke(formatter, MarkerStyle.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+	
+	@FormatterAttrSetter(BarDirection.class)
+	public static void setBarDirection(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, BarDirection.valueOf(attrValue));
 		} catch(Exception ex) {
 			throw new FormatterException(formatter, ex);
 		}

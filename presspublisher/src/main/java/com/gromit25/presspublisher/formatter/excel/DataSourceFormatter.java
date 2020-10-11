@@ -31,12 +31,12 @@ public class DataSourceFormatter extends AbstractChartComponent {
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 		
 		//
-		if(false == (copyObj instanceof SeriesFormatter)) {
-			throw new FormatterException(this, "output object is not SeriesFormatter.");
+		if(false == (copyObj instanceof AbstractSeriesFormatter)) {
+			throw new FormatterException(this, "output object is not AbstractSeriesFormatter.");
 		}
 		
 		//
-		SeriesFormatter copy = (SeriesFormatter)copyObj;
+		AbstractSeriesFormatter copy = (AbstractSeriesFormatter)copyObj;
 		
 		//
 		int startRow = 0;

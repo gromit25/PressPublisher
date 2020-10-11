@@ -2,8 +2,8 @@ package com.gromit25.presspublisher.formatter.excel;
 
 import java.nio.charset.Charset;
 
-import org.apache.poi.xddf.usermodel.chart.ChartTypes;
-import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
+import org.apache.poi.xddf.usermodel.chart.XDDFChartAxis;
+import org.apache.poi.xddf.usermodel.chart.XDDFValueAxis;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
@@ -19,13 +19,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-@FormatterSpec(group="excel", tag="line-chart")
+@FormatterSpec(group="excel", tag="chart")
 public class ChartFormatter extends AbstractExcelFormatter {
-	
-	@Getter
-	@Setter
-	@FormatterAttr(name="type", mandatory = true)
-	private ChartTypes type;
 	
 	/**
 	 * 
@@ -50,18 +45,27 @@ public class ChartFormatter extends AbstractExcelFormatter {
 	
 	/**
 	 * 생성할 chart 객체
+	 * 하위 컴포넌트에서 사용됨
 	 */
 	@Getter
 	@Setter(AccessLevel.PRIVATE)
 	private XSSFChart chart;
 	
 	/**
-	 * chart 객체에 표시할 chart data 객체
-	 * 하위 컴포넌트에서 사용됨
+	 * category axis 객체
+	 * 하위 컴포넌트인 AxesFormatter의 AxisFormatter(tag: category-axis) 객체에서 생성하여 설정함
 	 */
 	@Getter
 	@Setter(AccessLevel.PACKAGE)
-	private XDDFChartData chartData;
+	private XDDFChartAxis categoryAxis;
+	
+	/**
+	 * value axis 객체
+	 * 하위 컴포넌트인 AxesFormatter의 AxisFormatter(tag: value-axis) 객체에서 생성하여 설정함
+	 */
+	@Getter
+	@Setter(AccessLevel.PACKAGE)
+	private XDDFValueAxis valueAxis;
 	
 	@Override
 	public void addChildFormatter(Formatter formatter) throws FormatterException {
@@ -79,6 +83,8 @@ public class ChartFormatter extends AbstractExcelFormatter {
 		this.setWorksheet(copy.getWorksheet());
 		
 		// 1. chart 객체를 생성함
+		
+		// 차트 객체의 위치를 설정함
 		int startRow = 0;
 		int startColumn = 0;
 		int endRow = 0;
@@ -100,12 +106,12 @@ public class ChartFormatter extends AbstractExcelFormatter {
 		XSSFClientAnchor anchor = drawing.createAnchor(
 				0, 0, 0, 0, startColumn, startRow, endColumn, endRow);
 
+		// 하위 컴포넌트에서 사용하기 위해, 
+		// chart 객체 생성 후 member변수(chart)에 설정함
 		this.setChart(drawing.createChart(anchor));
 		
-		// 2. 차트 컴포넌트를 설정함(axis, series 등) 
+		// 2. 차트 컴포넌트를 설정함(axis, series 등)
+		//    실제 차트를 그리는 것은 하위 컴포넌트의 SeriesFormatter 들임
 		this.execChildFormatters(this, charset, values);
-		
-		// 3. 설정된 차트를 엑셀에 출력함
-		this.getChart().plot(this.getChartData());
 	}
 }

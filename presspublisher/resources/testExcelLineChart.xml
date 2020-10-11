@@ -31,7 +31,7 @@
 			<cell type="NUMERIC">|13724923</cell>
 		</rowcells>
 
-		<line-chart type="LINE"
+		<chart
 			title="Area-wise Top Seven Countries"
 			range="4:0~26:7">
 		
@@ -40,17 +40,17 @@
 				<value-axis position="LEFT" title="Area &amp; Population"/>
 			</axes>
 			
-			<series title="Area" smooth="false" mark-style="STAR">
+			<line-series title="Area" smooth="false" mark-style="STAR">
 				<category-ds range="0:0~0:6" type="STRING"/>
 				<value-ds range="1:0~1:6" type="NUMBER"/>
-			</series>
+			</line-series>
 			
-			<series title="Population" smooth="true" mark-style="SQUARE" mark-size="6">
+			<bar-series title="Population" direction="COL">
 				<category-ds range="0:0~0:6" type="STRING"/>
 				<value-ds range="2:0~2:6" type="NUMBER"/>
-			</series>
+			</bar-series>
 			
-		</line-chart>
+		</chart>
 		
 	</worksheet>
 </workbook>

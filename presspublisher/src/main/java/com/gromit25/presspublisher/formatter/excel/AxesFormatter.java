@@ -3,7 +3,6 @@ package com.gromit25.presspublisher.formatter.excel;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.XDDFChartAxis;
-import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
 import org.apache.poi.xddf.usermodel.chart.XDDFValueAxis;
 import org.apache.poi.xssf.usermodel.XSSFChart;
 
@@ -56,7 +55,7 @@ public class AxesFormatter extends AbstractChartComponent {
 	@Override
 	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
 		
-		//
+		// 입력값 검사
 		if(false == (copyObj instanceof ChartFormatter)) {
 			throw new FormatterException(this, "Invalid Formatter(LineChartFormatter expected).");
 		}
@@ -65,22 +64,14 @@ public class AxesFormatter extends AbstractChartComponent {
 		ChartFormatter copy = (ChartFormatter)copyObj;
 		this.setChart(copy.getChart());
 		
-		// category-axis와 value-axis를 설정함
+		// 2. 하위 컴포넌트(AxisFormatter)에서
+		//    member 변수인 categoryAxis와 valueAxis를 설정함
 		this.execChildFormatters(this, charset, values);
 		
-		// category-axis와 value-axis가 설정되어 있는지 검사
-		if(null == this.getCategoryAxis()) {
-			throw new FormatterException(this, "category-axis is not found.");
-		}
-		
-		if(null == this.getValueAxis()) {
-			throw new FormatterException(this, "value-axis is not found.");
-		}
-		
-		// chart data 생성 및 설정
-		XDDFChartData chartData = copy.getChart().createData(
-				copy.getType(), this.getCategoryAxis(), this.getValueAxis());   
-		copy.setChartData(chartData);
+		// 3. chart formatter에
+		//    categoryAxis와 valueAxis를 설정함
+		copy.setCategoryAxis(this.getCategoryAxis());
+		copy.setValueAxis(this.getValueAxis());
 	}
 
 }
