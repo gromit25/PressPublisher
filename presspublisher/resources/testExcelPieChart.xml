@@ -30,7 +30,7 @@
 			
 			<legend position="RIGHT"/>
 			
-			<pie-series title="Area" smooth="false" mark-style="STAR">
+			<pie-series title="Area">
 				<category-ds range="0:0~0:6" type="STRING"/>
 				<value-ds range="1:0~1:6" type="NUMBER"/>
 			</pie-series>
