@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+	<worksheet name="Line Chart">
+
+		<cursor position="0:0"/>
+		
+		<rowcells>
+			<cell>|Russia</cell>
+			<cell>|Canada</cell>
+			<cell>|USA</cell>
+			<cell>|China</cell>
+			<cell>|Brazil</cell>
+			<cell>|Australia</cell>
+			<cell>|India</cell>
+		</rowcells>
+		
+		<rowcells>
+			<cell type="NUMERIC">|17098242</cell>
+			<cell type="NUMERIC">|9984670</cell>
+			<cell type="NUMERIC">|9826675</cell>
+			<cell type="NUMERIC">|9596961</cell>
+			<cell type="NUMERIC">|8514877</cell>
+			<cell type="NUMERIC">|7741220</cell>
+			<cell type="NUMERIC">|3287263</cell>
+		</rowcells>
+
+		<chart
+			title="Area-wise Top Seven Countries"
+			range="4:0~26:7">
+			
+			<pie-series title="Area" smooth="false" mark-style="STAR">
+				<category-ds range="0:0~0:6" type="STRING"/>
+				<value-ds range="1:0~1:6" type="NUMBER"/>
+			</pie-series>
+			
+		</chart>
+		
+	</worksheet>
+</workbook>
