@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
 import org.apache.poi.xddf.usermodel.chart.BarDirection;
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
+import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import org.apache.poi.xddf.usermodel.chart.MarkerStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
@@ -135,4 +136,14 @@ public class ExcelAttrSetter {
 			throw new FormatterException(formatter, ex);
 		}
 	}
+	
+	@FormatterAttrSetter(LegendPosition.class)
+	public static void setLegendPosition(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
+		try {
+			setMethod.invoke(formatter, LegendPosition.valueOf(attrValue));
+		} catch(Exception ex) {
+			throw new FormatterException(formatter, ex);
+		}
+	}
+
 }
