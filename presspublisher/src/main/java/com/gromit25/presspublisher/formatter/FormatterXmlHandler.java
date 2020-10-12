@@ -328,7 +328,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			//    setter 메소드는 FormatterAttrSetter 어노테이션이 선언된 메소드임
 			Method setterMethod = this.getAttrSetters().get(field.getType());
 			if(setterMethod == null) {
-				throw new Exception("setter method is not found.:" + field.getType());
+				throw new FormatterException(formatter, "setter method is not found.:" + field.getType());
 			}
 			
 			// 3. Formatter 객체의 필드 setter 메소드를 가져오기 위해,
@@ -342,7 +342,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			//     필수인데 값이 없을 경우 오류 발생함
 			if(attrValue == null || attrValue.trim().equals(""))  {
 				if(attrAnnotation.mandatory() == true) {
-					throw new Exception(attrAnnotation.name() + " is not set");
+					throw new FormatterException(formatter, attrAnnotation.name() + " is not set");
 				} else {
 					continue;
 				}
@@ -351,7 +351,11 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			// 5. setter 메소드를 호출하여 formatter에 속성을 설정함
 			//    setter 메소드는 필드의 type(class)에 따라 속성 값을 변환하여,
 			//    formatter 객체의 settter 메소드를 호출함
-			setterMethod.invoke(null, formatter, pd.getWriteMethod(), attrValue);
+			try {
+				setterMethod.invoke(null, formatter, pd.getWriteMethod(), attrValue);
+			} catch(Exception ex) {
+				throw new FormatterException(formatter, attrAnnotation.name(), ex);
+			}
 
 		} // End of for
 	}

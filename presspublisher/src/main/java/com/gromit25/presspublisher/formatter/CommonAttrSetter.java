@@ -21,12 +21,8 @@ public class CommonAttrSetter {
 	 * @param attrValue formatter에 설정할 속성의 문자열값
 	 */
 	@FormatterAttrSetter(String.class)
-	public static void setString(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
-		try {
-			setMethod.invoke(formatter, attrValue);
-		} catch(Exception ex) {
-			throw new FormatterException(formatter, ex);
-		}
+	public static void setString(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, attrValue);
 	}
 	
 	/**
@@ -37,12 +33,8 @@ public class CommonAttrSetter {
 	 * @param attrValue formatter에 설정할 속성의 문자열값
 	 */
 	@FormatterAttrSetter({Boolean.class, boolean.class})
-	public static void setBoolean(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
-		try {
-			setMethod.invoke(formatter, Boolean.parseBoolean(attrValue));
-		} catch(Exception ex) {
-			throw new FormatterException(formatter, ex);
-		}
+	public static void setBoolean(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Boolean.parseBoolean(attrValue));
 	}
 	
 	/**
@@ -53,12 +45,8 @@ public class CommonAttrSetter {
 	 * @param attrValue formatter에 설정할 속성의 문자열값
 	 */
 	@FormatterAttrSetter({Integer.class, int.class})
-	public static void setInt(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
-		try {
-			setMethod.invoke(formatter, Integer.parseInt(attrValue));
-		} catch(Exception ex) {
-			throw new FormatterException(formatter, ex);
-		}
+	public static void setInt(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Integer.parseInt(attrValue));
 	}
 	
 	/**
@@ -69,12 +57,8 @@ public class CommonAttrSetter {
 	 * @param attrValue formatter에 설정할 속성의 문자열값
 	 */
 	@FormatterAttrSetter({Short.class, short.class})
-	public static void setShort(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
-		try {
-			setMethod.invoke(formatter, Short.parseShort(attrValue));
-		} catch(Exception ex) {
-			throw new FormatterException(formatter, ex);
-		}
+	public static void setShort(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Short.parseShort(attrValue));
 	}
 	
 	/**
@@ -85,11 +69,7 @@ public class CommonAttrSetter {
 	 * @param attrValue formatter에 설정할 속성의 문자열값
 	 */
 	@FormatterAttrSetter(Evaluator.class)
-	public static void setEvaluator(Formatter formatter, Method setMethod, String attrValue) throws FormatterException {
-		try {
-			setMethod.invoke(formatter, Evaluator.compile(attrValue));
-		} catch(Exception ex) {
-			throw new FormatterException(formatter, ex);
-		}
+	public static void setEvaluator(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Evaluator.compile(attrValue));
 	}
 }

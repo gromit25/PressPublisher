@@ -68,6 +68,14 @@ public class FormatterException extends Exception {
 		this(formatter, new Exception(msg));
 	}
 	
+
+	@Override
+	public String getMessage() {
+		String message = this.getLocMessage() + "\n"
+				+ super.getMessage();
+		return message;
+	}
+	
 	/**
 	 * 예외 발생 위치를 문자열로 변환하여 반환
 	 * @return 예외 발생 위치 문자열
@@ -76,18 +84,17 @@ public class FormatterException extends Exception {
 		
 		StringBuffer locMessage = new StringBuffer(""); 
 		
-		locMessage.append("Publish Xml Tag:")
-			.append(this.getFormatter().getTagName()).append("\n")
-			.append("\tLine:")
+		locMessage.append("Formatter XML tag at:")
+			.append(" Line:")
 			.append(this.getFormatter().getLineNumber())
-			.append("\n")
-			.append("\tColumn:")
-			.append(this.getFormatter().getColumnNumber());
+			.append(", Column:")
+			.append(this.getFormatter().getColumnNumber())
+			.append(", tag name:")
+			.append(this.getFormatter().getTagName());
 		
 		// attribute 이름이 있는 경우에만 출력함
 		if(this.getAttributeName() != null) {
-			locMessage.append("\n\t")
-				.append("Attribute :")
+			locMessage.append(", attribute name:")
 				.append(this.getAttributeName());
 		}
 		
