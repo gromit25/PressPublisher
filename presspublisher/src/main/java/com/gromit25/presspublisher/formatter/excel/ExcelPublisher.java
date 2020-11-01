@@ -3,8 +3,6 @@ package com.gromit25.presspublisher.formatter.excel;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.gromit25.presspublisher.Publisher;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterXmlHandler;
@@ -22,15 +20,15 @@ public class ExcelPublisher extends Publisher {
 	}
 
 	@Override
-	public void publish(Object out, Charset charset, ValueContainer values) throws Exception {
+	public void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception {
 		
-		if(false == (out instanceof OutputStream)) {
-			throw new Exception("output object is not OutputStream class.");
+		if(false == (this.getRootFormatter() instanceof WorkbookFormatter)) {
+			throw new Exception("root formatter is not WorkbookFormatter:" + this.getRootFormatter().getClass());
 		}
 		
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		this.getRootFormatter().format(workbook, charset, values);
-		workbook.write((OutputStream)out);
+		WorkbookFormatter root = (WorkbookFormatter)this.getRootFormatter();
+		root.format(out, charset, values);
+		root.getWorkbook().write((OutputStream)out);
 	}
 
 }

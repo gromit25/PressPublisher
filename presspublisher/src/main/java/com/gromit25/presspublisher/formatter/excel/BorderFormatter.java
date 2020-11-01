@@ -1,9 +1,9 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.xml.sax.Attributes;
 
@@ -23,7 +23,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="border")
-public class BorderFormatter extends AbstractSubCellStyleFormatter {
+public class BorderFormatter extends AbstractCellStyleComponentFormatter {
 	
 	/** 상단 테두리 Style */
 	@Getter(value=AccessLevel.PRIVATE)
@@ -102,37 +102,37 @@ public class BorderFormatter extends AbstractSubCellStyleFormatter {
 	}
 
 	@Override
-	protected void formatCellStyle(XSSFCellStyle copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatCellStyle(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 상단 테두리 및 색 지겅
 		if(this.getStyleTop() != null) {
-			copy.setBorderTop(this.getStyleTop());
+			this.getParentStyle().setBorderTop(this.getStyleTop());
 			if(this.getColor() != null) {
-				copy.setTopBorderColor(this.getColor());
+				this.getParentStyle().setTopBorderColor(this.getColor());
 			}
 		}
 		
 		// 하단 테두리 및 색 지겅
 		if(this.getStyleBottom() != null) {
-			copy.setBorderBottom(this.getStyleBottom());
+			this.getParentStyle().setBorderBottom(this.getStyleBottom());
 			if(this.getColor() != null) {
-				copy.setBottomBorderColor(this.getColor());
+				this.getParentStyle().setBottomBorderColor(this.getColor());
 			}
 		}
 		
 		// 왼쪽 테두리 및 색 지겅
 		if(this.getStyleLeft() != null) {
-			copy.setBorderLeft(this.getStyleLeft());
+			this.getParentStyle().setBorderLeft(this.getStyleLeft());
 			if(this.getColor() != null) {
-				copy.setLeftBorderColor(this.getColor());
+				this.getParentStyle().setLeftBorderColor(this.getColor());
 			}
 		}
 		
 		// 오른쪽 테두리 및 색 지겅
 		if(this.getStyleRight() != null) {
-			copy.setBorderRight(this.getStyleRight());
+			this.getParentStyle().setBorderRight(this.getStyleRight());
 			if(this.getColor() != null) {
-				copy.setRightBorderColor(this.getColor());
+				this.getParentStyle().setRightBorderColor(this.getColor());
 			}
 		}
 	}

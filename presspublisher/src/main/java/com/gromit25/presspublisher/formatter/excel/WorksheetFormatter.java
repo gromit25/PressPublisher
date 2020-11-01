@@ -1,10 +1,10 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
-import com.gromit25.presspublisher.common.PublisherUtil;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
@@ -75,17 +75,12 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	private CursorDirection cursorDirection = CursorDirection.DOWN;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
-		}
-
 		// workbook formatter 설정
 		WorkbookFormatter workbook = null;
 		try {
-			workbook = PublisherUtil.cast(copyObj, WorkbookFormatter.class);
+			workbook = this.getParent(WorkbookFormatter.class);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
@@ -103,7 +98,7 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 		);
 		
 		// worksheet의 자식 formatter 수행
-		this.execChildFormatters(this, charset, values);
+		this.execChildFormatters(out, charset, values);
 		
 		// 첫 worksheet로 active worksheet를 변경
 		workbook.getWorkbook().setActiveSheet(0);

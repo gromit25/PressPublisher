@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -78,15 +79,15 @@ public class MapToListFormatter extends AbstractFlowFormatter {
 	}
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 체크
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 		
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		// 1. map 객체를 가져옴

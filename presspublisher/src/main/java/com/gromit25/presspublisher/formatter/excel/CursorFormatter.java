@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
@@ -24,7 +25,7 @@ public class CursorFormatter extends AbstractExcelFormatter {
 	private RowColumnEval positionExpEval;
 
 	@Override
-	protected void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values)	throws FormatterException {
+	protected void formatExcel(OutputStream out, Charset charset, ValueContainer values)	throws FormatterException {
 		
 		try {
 			
@@ -33,7 +34,8 @@ public class CursorFormatter extends AbstractExcelFormatter {
 			int columnPosition = this.getPositionExpEval().evalColumnValue(values);
 			
 			// workbook 커서 위치를 설정함
-			copy.setCursorPosition(rowPosition, columnPosition);
+			this.getParent(WorksheetFormatter.class)
+				.setCursorPosition(rowPosition, columnPosition);
 			
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);

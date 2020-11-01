@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -72,7 +73,16 @@ public class SwitchFormatter extends AbstractFlowFormatter {
 	}
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+		
+		// 입력값 체크
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
+		}
+		
+		if(values == null) {
+			throw new FormatterException(this, "Value Container is null.");
+		}
 		
 		// 1. switch 문의 내용을 수행하여, 수행결과를 가지고 옴
 		Object condition = null;
@@ -98,9 +108,9 @@ public class SwitchFormatter extends AbstractFlowFormatter {
 		// 3. switch 문 수행 결과에 해당하는 case formatter를 수행함
 		//    만일 없을 경우 default formatter를 수행함
 		if(caseFormatter != null) {
-			caseFormatter.format(copyObj, charset, values);
+			caseFormatter.format(out, charset, values);
 		} else if(this.getDefaultFormatter() != null){
-			this.getDefaultFormatter().format(copyObj, charset, values);
+			this.getDefaultFormatter().format(out, charset, values);
 		}
 	}
 

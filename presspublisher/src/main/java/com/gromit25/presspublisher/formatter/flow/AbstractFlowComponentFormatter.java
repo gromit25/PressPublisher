@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
@@ -15,7 +16,7 @@ import lombok.Setter;
  * 
  * @author jmsohn
  */
-public abstract class AbstractSubFlowFormatter extends AbstractFlowFormatter {
+public abstract class AbstractFlowComponentFormatter extends AbstractFlowFormatter {
 	
 	/**
 	 * formatter의 하위 기본 flow
@@ -35,18 +36,18 @@ public abstract class AbstractSubFlowFormatter extends AbstractFlowFormatter {
 	}
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 
 		if(values == null) {
 			throw new FormatterException(this, "Value Container is null");
 		}
 
-		this.getBasicFlowFormatter().format(copyObj, charset, values);
+		this.getBasicFlowFormatter().format(out, charset, values);
 	}
 
 }

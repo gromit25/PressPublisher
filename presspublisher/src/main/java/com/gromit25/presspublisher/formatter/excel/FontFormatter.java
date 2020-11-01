@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 
@@ -21,7 +22,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="font")
-public class FontFormatter extends AbstractWorkbookSubComponentFormatter {
+public class FontFormatter extends AbstractWorkbookComponentFormatter {
 	
 	static String FONT_BUNDLE_NAME = "_FONT_BUNDLE_";
 
@@ -62,10 +63,11 @@ public class FontFormatter extends AbstractWorkbookSubComponentFormatter {
 	private boolean bold = false;
 	
 	@Override
-	protected void formatExcel(WorkbookFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// excel workbook에서 글꼴 생성
-		XSSFFont font = copy.getWorkbook().createFont(); 
+		XSSFFont font = this.getParent(WorkbookFormatter.class)
+							.getWorkbook().createFont(); 
 		
 		// 글꼴명 설정
 		if(this.getFontName() != null) {

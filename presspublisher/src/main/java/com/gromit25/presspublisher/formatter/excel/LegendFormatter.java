@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
@@ -22,14 +23,10 @@ public class LegendFormatter extends AbstractChartComponent {
 	private LegendPosition position;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		// 입력값 검사
-		if(false == (copyObj instanceof ChartFormatter)) {
-			throw new FormatterException(this, "Invalid Formatter(LineChartFormatter expected).");
-		}
-		
-		ChartFormatter copy = (ChartFormatter)copyObj;
-		XDDFChartLegend legend = copy.getChart().getOrAddLegend();
+		XDDFChartLegend legend = this.getParent(ChartFormatter.class)
+									 .getChart().getOrAddLegend();
 		
 		if(null != this.getPosition()) {
 			legend.setPosition(this.getPosition());

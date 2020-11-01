@@ -1,10 +1,10 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.gromit25.presspublisher.common.PublisherUtil;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
@@ -31,16 +31,16 @@ public class WorkbookFormatter extends BasicFlowFormatter {
 	private XSSFWorkbook workbook;
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 작업 workbook 설정
 		try {
-			this.setWorkbook(PublisherUtil.cast(copyObj, XSSFWorkbook.class));
+			this.setWorkbook(new XSSFWorkbook());
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
 		
 		// child formatter 호출 
-		this.execChildFormatters(this, charset, values);
+		this.execChildFormatters(out, charset, values);
 	}
 }

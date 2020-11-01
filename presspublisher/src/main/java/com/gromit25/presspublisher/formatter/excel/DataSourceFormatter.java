@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -28,15 +29,10 @@ public class DataSourceFormatter extends AbstractChartComponent {
 	private DataSourceTypes type;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		//
-		if(false == (copyObj instanceof AbstractSeriesFormatter)) {
-			throw new FormatterException(this, "output object is not AbstractSeriesFormatter.");
-		}
-		
-		//
-		AbstractSeriesFormatter copy = (AbstractSeriesFormatter)copyObj;
+		AbstractSeriesFormatter copy = this.getParent(AbstractSeriesFormatter.class);
 		
 		//
 		int startRow = 0;

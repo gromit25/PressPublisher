@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gromit25.presspublisher.formatter.FormatterXmlHandler;
-import com.gromit25.presspublisher.formatter.flow.AbstractSubFlowFormatter;
+import com.gromit25.presspublisher.formatter.flow.AbstractFlowComponentFormatter;
 import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 import com.gromit25.presspublisher.formatter.text.TextFlowFormatter;
 
@@ -41,7 +41,7 @@ public class ExcelFormatterXmlHandler extends FormatterXmlHandler {
 	}
 
 	@Override
-	protected void setSubBasicFlow(AbstractSubFlowFormatter formatter) throws Exception {
+	protected void setSubBasicFlow(AbstractFlowComponentFormatter formatter) throws Exception {
 		
 		// hasCellFormatterInParents() method 설명 참조
 		if(this.hasCellFormatterInParents() == true) {

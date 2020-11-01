@@ -13,7 +13,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="case")
-public class CaseFormatter extends AbstractSubFlowFormatter {
+public class CaseFormatter extends AbstractFlowComponentFormatter {
 	
 	/**
 	 * case문의 매칭용 value

@@ -34,9 +34,9 @@ public class TextFlowFormatter extends AbstractTextFormatter {
 	}
 
 	@Override
-	protected void formatText(OutputStream copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatText(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		// 자식의 Formatter 수행
-		this.execChildFormatters(copy, charset, values);
+		this.execChildFormatters(out, charset, values);
 	}
 
 }

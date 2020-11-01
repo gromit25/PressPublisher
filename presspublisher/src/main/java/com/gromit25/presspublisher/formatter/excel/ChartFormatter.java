@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.XDDFChartAxis;
@@ -36,14 +37,6 @@ public class ChartFormatter extends AbstractExcelFormatter {
 	private String title;
 	
 	/**
-	 * 현재의 worksheet
-	 * 하위 컴포넌트에서 사용됨
-	 */
-	@Getter
-	@Setter(AccessLevel.PRIVATE)
-	private XSSFSheet worksheet;
-	
-	/**
 	 * 생성할 chart 객체
 	 * 하위 컴포넌트에서 사용됨
 	 */
@@ -77,10 +70,7 @@ public class ChartFormatter extends AbstractExcelFormatter {
 	}
 
 	@Override
-	protected void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
-		
-		// 현재 worksheet 설정
-		this.setWorksheet(copy.getWorksheet());
+	protected void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 1. chart 객체를 생성함
 		
@@ -102,7 +92,7 @@ public class ChartFormatter extends AbstractExcelFormatter {
 			throw new FormatterException(this, ex);
 		}
 		
-		XSSFDrawing drawing = copy.getWorksheet().createDrawingPatriarch();
+		XSSFDrawing drawing = this.getWorksheet().createDrawingPatriarch();
 		XSSFClientAnchor anchor = drawing.createAnchor(
 				0, 0, 0, 0, startColumn, startRow, endColumn, endRow);
 
@@ -112,6 +102,14 @@ public class ChartFormatter extends AbstractExcelFormatter {
 		
 		// 2. 차트 컴포넌트를 설정함(axis, series 등)
 		//    실제 차트를 그리는 것은 하위 컴포넌트의 SeriesFormatter 들임
-		this.execChildFormatters(this, charset, values);
+		this.execChildFormatters(out, charset, values);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public XSSFSheet getWorksheet() throws FormatterException {
+		return this.getParent(WorksheetFormatter.class).getWorksheet();
 	}
 }

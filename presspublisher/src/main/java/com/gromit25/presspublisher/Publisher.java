@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
@@ -30,10 +31,10 @@ public abstract class Publisher {
 	
 	/**
 	 * output stream으로 publish 수행 
-	 * @param out 출력할 객체
+	 * @param out 출력 스트림
 	 * @param charset charater set
 	 * @param values value container
 	 */
-	public abstract void publish(Object out, Charset charset, ValueContainer values) throws Exception;
+	public abstract void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception;
 	
 }

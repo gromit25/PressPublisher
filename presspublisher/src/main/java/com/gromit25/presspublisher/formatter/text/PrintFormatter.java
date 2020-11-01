@@ -52,19 +52,19 @@ public class PrintFormatter extends AbstractTextFormatter {
 	}
 
 	@Override
-	public void formatText(OutputStream copy, Charset charset, ValueContainer values) throws FormatterException {
+	public void formatText(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copy == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 		
 		if(charset == null) {
-			throw new FormatterException(this, "Charset is null");
+			throw new FormatterException(this, "Charset is null.");
 		}
 		
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		// 표현식(exp)을 수행한 후
@@ -75,7 +75,7 @@ public class PrintFormatter extends AbstractTextFormatter {
 			
 			// 수행 결과를 메세지에 설정함
 			if(result != null) {
-				copy.write(
+				out.write(
 						PublisherUtil.makeString(result.toString(), this.getLength())
 						// 개행만 있고 '|' 이 없을경우,
 						// 개행 이후 부분을 최종적으로 잘라내기 때문에
@@ -83,10 +83,10 @@ public class PrintFormatter extends AbstractTextFormatter {
 						.replaceAll("\n", "\n|")
 						.getBytes(charset));
 			} else {
-				copy.write(PublisherUtil.makeString("N/A", this.getLength()).getBytes(charset));
+				out.write(PublisherUtil.makeString("N/A", this.getLength()).getBytes(charset));
 			}
 			
-			copy.flush();
+			out.flush();
 			
 		} catch(Exception ex) {
 			

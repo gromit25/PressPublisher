@@ -14,7 +14,7 @@ import com.gromit25.presspublisher.formatter.FormatterSpec;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="alt")
-public class AltFlowFormatter extends AbstractSubFlowFormatter {
+public class AltFlowFormatter extends AbstractFlowComponentFormatter {
 
 	@Override
 	public void setAttributes(Attributes attributes) throws FormatterException {

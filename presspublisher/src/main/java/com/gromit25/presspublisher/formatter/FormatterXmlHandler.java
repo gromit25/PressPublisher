@@ -13,7 +13,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.gromit25.presspublisher.formatter.flow.AbstractSubFlowFormatter;
+import com.gromit25.presspublisher.formatter.flow.AbstractFlowComponentFormatter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -89,7 +89,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	 * 
 	 * @param formatter 하위 flow를 가지는 Formatter
 	 */
-	protected abstract void setSubBasicFlow(AbstractSubFlowFormatter formatter) throws Exception;
+	protected abstract void setSubBasicFlow(AbstractFlowComponentFormatter formatter) throws Exception;
 	
 	/**
 	 * 생성자
@@ -225,8 +225,8 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			
 			// 하위 flow를 가지는 formatter일 경우,
 			// 하위 flow를 설정함
-			if(this.getFormatter() instanceof AbstractSubFlowFormatter) {
-				this.setSubBasicFlow((AbstractSubFlowFormatter)this.getFormatter());
+			if(this.getFormatter() instanceof AbstractFlowComponentFormatter) {
+				this.setSubBasicFlow((AbstractFlowComponentFormatter)this.getFormatter());
 			}
 			
 			// formatter 테그명
@@ -258,16 +258,17 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			
 			if(this.getParentFormatterStack().isEmpty() == false) {
 				
-				// 스택에 저장된 Formatter가 있는 경우
+				// parent 스택에 저장된 Formatter가 있는 경우
 				//
 				// parsing 중인 Formatter의 parsing이 완료 되었기 때문에
 				// 부모 Formatter의 자식 Formatter 목록에
 				// parsing 중인 Formatter를 등록하고,
 				//
 				// parsing 중인 Formatter는 부모 Formatter로 설정함
-				Formatter parentFormatter = this.getParentFormatterStack().pop();
-				parentFormatter.addChildFormatter(this.getFormatter());
-				this.setFormatter(parentFormatter);
+				Formatter parent = this.getParentFormatterStack().pop();
+				this.getFormatter().setParent(parent);
+				parent.addChildFormatter(this.getFormatter());
+				this.setFormatter(parent);
 			}
 			
 		} catch(Exception ex) {

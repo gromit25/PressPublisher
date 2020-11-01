@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.Evaluator;
@@ -24,7 +25,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="if")
-public class IfFormatter extends AbstractSubFlowFormatter {
+public class IfFormatter extends AbstractFlowComponentFormatter {
 	
 	/** if문 수행 여부를 확인 하기 위한 스크립트 Evaluator */
 	@Getter
@@ -33,15 +34,15 @@ public class IfFormatter extends AbstractSubFlowFormatter {
 	private Evaluator exp;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		try {
@@ -51,7 +52,7 @@ public class IfFormatter extends AbstractSubFlowFormatter {
 			Boolean condition = this.getExp().eval(values, Boolean.class);
 			
 			if(condition == true) {
-				this.getBasicFlowFormatter().format(copyObj, charset, values);
+				this.getBasicFlowFormatter().format(out, charset, values);
 			}
 
 		} catch(Exception ex) {

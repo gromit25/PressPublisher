@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.XDDFChartAxis;
@@ -53,20 +54,17 @@ public class AxesFormatter extends AbstractChartComponent {
 	}
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검사
-		if(false == (copyObj instanceof ChartFormatter)) {
-			throw new FormatterException(this, "Invalid Formatter(LineChartFormatter expected).");
-		}
 		
-		//
-		ChartFormatter copy = (ChartFormatter)copyObj;
+		// 1. chartformatter를 가져옴
+		ChartFormatter copy = this.getParent(ChartFormatter.class);
 		this.setChart(copy.getChart());
 		
 		// 2. 하위 컴포넌트(AxisFormatter)에서
 		//    member 변수인 categoryAxis와 valueAxis를 설정함
-		this.execChildFormatters(this, charset, values);
+		this.execChildFormatters(out, charset, values);
 		
 		// 3. chart formatter에
 		//    categoryAxis와 valueAxis를 설정함

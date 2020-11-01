@@ -10,5 +10,5 @@ import com.gromit25.presspublisher.formatter.FormatterSpec;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="default")
-public class DefaultFormatter extends AbstractSubFlowFormatter {
+public class DefaultFormatter extends AbstractFlowComponentFormatter {
 }

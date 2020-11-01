@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.xml.sax.Attributes;
@@ -20,18 +21,23 @@ public abstract class Formatter {
 
 	/** tag 명 */
 	@Getter
-	@Setter(value=AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private String tagName;
 	
 	/** tag의 시작 line number */
 	@Getter
-	@Setter(value=AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private int lineNumber;
 	
 	/** tag의 시작 column number */
 	@Getter
-	@Setter(value=AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private int columnNumber;
+	
+	/** 부모 Formatter */
+	@Getter
+	@Setter(AccessLevel.PACKAGE)
+	private Formatter parent;
 	
 	// xml에서 Formatter 생성시, callback되는 메소드 목록
 	
@@ -61,9 +67,33 @@ public abstract class Formatter {
 	/**
 	 * formatter에 설정된 내용과 value container에 저장된 값을 이용하여
 	 * 출력작업 수행
-	 * @param copyObj 출력 대상 객체
+	 * @param out 출력 스트림
 	 * @param charset 출력시 사용할 character set
 	 * @param values value container
 	 */
-	public abstract void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException;
+	public abstract void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException;
+	
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	protected <T extends Formatter> T getParent(Class<T> type) throws FormatterException {
+		return type.cast(this.getParent());
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	protected <T extends Formatter> T getParentInBranch(Class<T> type) throws FormatterException {
+		
+		Formatter parent = this.getParent();
+		while(parent != null && false == type.isInstance(parent)) {
+			parent = parent.getParent();
+		}
+		
+		return type.cast(parent);
+	}
 }

@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="foreach")
-public class ForeachFormatter extends AbstractSubFlowFormatter {
+public class ForeachFormatter extends AbstractFlowComponentFormatter {
 	
 	/** foreach loop의 index명을 만들때 element명의 전치문구 */
 	private static String INDEX_PRE = "_index_";
@@ -67,15 +68,15 @@ public class ForeachFormatter extends AbstractSubFlowFormatter {
 	}
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		// list 속성에 설정된
@@ -113,7 +114,7 @@ public class ForeachFormatter extends AbstractSubFlowFormatter {
 					throw new FormatterException(this, ex);
 				}
 				
-				this.getBasicFlowFormatter().format(copyObj, charset, values);
+				this.getBasicFlowFormatter().format(out, charset, values);
 				
 				values.remove(this.getElement());
 				values.remove(INDEX_PRE + this.getElement());
@@ -125,7 +126,7 @@ public class ForeachFormatter extends AbstractSubFlowFormatter {
 			// element 가 없고, alt flow가 있을 경우
 			// alt flow를 수행후 결과를 추가
 			if(this.getAltFlowFormatter() != null) {
-				this.getAltFlowFormatter().format(copyObj, charset, values);
+				this.getAltFlowFormatter().format(out, charset, values);
 			}
 		}
 	}

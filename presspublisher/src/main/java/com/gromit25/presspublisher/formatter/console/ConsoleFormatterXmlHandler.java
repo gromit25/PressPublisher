@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gromit25.presspublisher.formatter.FormatterXmlHandler;
-import com.gromit25.presspublisher.formatter.flow.AbstractSubFlowFormatter;
+import com.gromit25.presspublisher.formatter.flow.AbstractFlowComponentFormatter;
 import com.gromit25.presspublisher.formatter.text.TextFlowFormatter;
 
 /**
@@ -40,7 +40,7 @@ public class ConsoleFormatterXmlHandler extends FormatterXmlHandler {
 	}
 
 	@Override
-	protected void setSubBasicFlow(AbstractSubFlowFormatter formatter) throws Exception {
+	protected void setSubBasicFlow(AbstractFlowComponentFormatter formatter) throws Exception {
 		formatter.setBasicFlowFormatter(new TextFlowFormatter());
 	}
 

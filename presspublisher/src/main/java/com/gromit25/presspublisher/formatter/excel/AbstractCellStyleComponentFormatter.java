@@ -1,10 +1,10 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
-import com.gromit25.presspublisher.common.PublisherUtil;
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterException;
@@ -16,15 +16,16 @@ import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
  * 
  * @author jmsohn
  */
-public abstract class AbstractSubCellStyleFormatter  extends BasicFlowFormatter {
+public abstract class AbstractCellStyleComponentFormatter  extends BasicFlowFormatter {
 	
 	/**
 	 * cellstyle에 설정작업 수행
-	 * @param copy 설정할 cellstyle
+	 * @param out 출력 스트림
+	 * @param parent 부모 CellStyleFormatter
 	 * @param charset 출력시 사용할 character set
 	 * @param values value container
 	 */
-	protected abstract void formatCellStyle(XSSFCellStyle copy, Charset charset, ValueContainer values) throws FormatterException;
+	protected abstract void formatCellStyle(OutputStream out, Charset charset, ValueContainer values) throws FormatterException;
 
 	@Override
 	public void addChildFormatter(Formatter formatter) throws FormatterException {
@@ -33,7 +34,7 @@ public abstract class AbstractSubCellStyleFormatter  extends BasicFlowFormatter 
 			throw new FormatterException(this, "formatter is null");
 		}
 		
-		if((formatter instanceof AbstractSubCellStyleFormatter) == false) {
+		if((formatter instanceof AbstractCellStyleComponentFormatter) == false) {
 			throw new FormatterException(this, "unexpected formatter type(not AbstractCellStyleFormatter):" + formatter.getClass().getName());
 		}
 		
@@ -41,16 +42,24 @@ public abstract class AbstractSubCellStyleFormatter  extends BasicFlowFormatter 
 	}
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		try {
-			XSSFCellStyle copy = PublisherUtil.cast(copyObj, XSSFCellStyle.class);
-			this.formatCellStyle(copy, charset, values);
+			this.formatCellStyle(out, charset, values);
 		} catch(FormatterException fex) {
 			throw fex;
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
 		
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	protected XSSFCellStyle getParentStyle() throws FormatterException {
+		CellStyleFormatter parent = this.getParent(CellStyleFormatter.class);
+		return parent.getStyle();
 	}
 }

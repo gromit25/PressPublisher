@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.Evaluator;
@@ -16,7 +17,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="flow", tag="for")
-public class ForFormatter extends AbstractSubFlowFormatter {
+public class ForFormatter extends AbstractFlowComponentFormatter {
 	
 	/** for문 initExp속성의 Evaluator */
 	@Getter
@@ -37,15 +38,15 @@ public class ForFormatter extends AbstractSubFlowFormatter {
 	private Evaluator stepExp;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this, "Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
 		}
 
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		// for문 수행
@@ -61,7 +62,7 @@ public class ForFormatter extends AbstractSubFlowFormatter {
 			) {
 				
 				// for 문 내부 플로우 반복 수행
-				this.getBasicFlowFormatter().format(copyObj, charset, values);
+				this.getBasicFlowFormatter().format(out, charset, values);
 				
 			}
 		

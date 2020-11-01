@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.flow;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -44,32 +45,33 @@ public class BasicFlowFormatter extends AbstractFlowFormatter {
 	}
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
-		this.execChildFormatters(copyObj, charset, values);
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+		this.execChildFormatters(out, charset, values);
 	}
 	
 
 	/**
 	 * 등록된 자식 formatter들을 모두 수행함
 	 * 
-	 * @param copyObj 출력 대상 객체
+	 * @param out 출력 스트림
+	 * @param parent 부모 Formatter
 	 * @param charset 출력시 사용할 character set
 	 * @param values value container
 	 */
-	protected void execChildFormatters(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execChildFormatters(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copyObj == null) {
-			throw new FormatterException(this,"Copy Object is null");
+		if(out == null) {
+			throw new FormatterException(this,"out param is null.");
 		}
 		
 		if(values == null) {
-			throw new FormatterException(this,"Value Container is null");
+			throw new FormatterException(this,"Value Container is null.");
 		}
 		
 		// 하위 formatter들을 하나씩 수행함
 		for(Formatter formatter: this.getChildFormatterList()) {
-			formatter.format(copyObj, charset, values);
+			formatter.format(out, charset, values);
 		}
 	}
 

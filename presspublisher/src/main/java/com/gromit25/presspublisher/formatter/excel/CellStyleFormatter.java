@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 
@@ -13,6 +14,7 @@ import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +25,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="cellstyle")
-public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
+public class CellStyleFormatter extends AbstractWorkbookComponentFormatter {
 	
 	/** value container의 cellstyle 목록의 이름 */
 	static String CELLSTYLE_BUNDLE_NAME = "_CELLSTYLE_BUNDLE_";
@@ -45,6 +47,11 @@ public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
 	@Setter
 	@FormatterAttr(name="wrap", mandatory=false)
 	private boolean wrap;
+	
+	/** */
+	@Getter
+	@Setter(AccessLevel.PRIVATE)	
+	private XSSFCellStyle style;
 	
 	/**
 	 * 생성자
@@ -87,7 +94,7 @@ public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
 		
 		// AbstractSubCellStyleFormatter 만 자식 Formatter로 등록될 수 있음
 		// 다른 formatter가 들어올 경우 오류 처리함
-		if((formatter instanceof AbstractSubCellStyleFormatter) == false) {
+		if((formatter instanceof AbstractCellStyleComponentFormatter) == false) {
 			throw new FormatterException(this, "unexpected formatter type(not AbstractCellStyleFormatter):" + formatter.getClass().getName());
 		}
 		
@@ -95,10 +102,12 @@ public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
 	}
 	
 	@Override
-	protected void formatExcel(WorkbookFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
+	protected void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+		
+		WorkbookFormatter parent = this.getParent(WorkbookFormatter.class);
 		
 		// excel workbook에서 style 생성
-		XSSFCellStyle style = copy.getWorkbook().createCellStyle();
+		this.setStyle(parent.getWorkbook().createCellStyle());
 		
 		// cell에 지정할 폰트 설정
 		@SuppressWarnings("unchecked")
@@ -129,6 +138,6 @@ public class CellStyleFormatter extends AbstractWorkbookSubComponentFormatter {
 		// 자식 formatter들 실행
 		// 자식 formatter에서 style에 추가 속성을 설정함
 		// ex) border, background, alignment 등
-		super.execChildFormatters(style, charset, values);
+		super.execChildFormatters(out, charset, values);
 	}
 }

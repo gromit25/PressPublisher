@@ -1,6 +1,7 @@
 package com.gromit25.presspublisher.formatter.excel;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -134,29 +135,26 @@ public class CellFormatter extends AbstractExcelFormatter {
 	}
 
 	@Override
-	public void formatExcel(WorksheetFormatter copy, Charset charset, ValueContainer values) throws FormatterException {
+	public void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
-		if(copy == null) {
-			throw new FormatterException(this, "Copy Object is null");
-		}
-		
 		if(charset == null) {
-			throw new FormatterException(this, "Charset is null");
+			throw new FormatterException(this, "Charset is null.");
 		}
 		
 		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 
 		try {
 			
 			////////////////////////////////////////////////////////////////
 			// 1. 사용할 cell의 객체 가져옴 
+			WorksheetFormatter parent = this.getParentInBranch(WorksheetFormatter.class);
 			
 			// Cell 위치의 Default 값은 worksheet의 커서 위치
-			int rowPosition = copy.getCursorRowPosition();
-			int columnPosition = copy.getCursorColumnPosition();
+			int rowPosition = parent.getCursorRowPosition();
+			int columnPosition = parent.getCursorColumnPosition();
 			
 			// 만일 설정된 Cell 위치(position)가 설정되어 있으면,
 			// 설정값으로 위치를 설정함
@@ -168,11 +166,11 @@ public class CellFormatter extends AbstractExcelFormatter {
 			// worksheet에 cell의 위치를 가져옴
 			// baseCell이라고 이름지은 이유는
 			// cell 병합이 있을 경우, 여러 cell을 다루기 때문에 기준점 cell이라는 의미임
-			XSSFSheet sheet = copy.getWorksheet();
+			XSSFSheet sheet = parent.getWorksheet();
 			XSSFCell baseCell = ExcelUtil.getCell(sheet, rowPosition, columnPosition);
 			
 			// worksheet의  cursor 위치를 현재 Cell의 위치로 설정함
-			copy.setCursorPosition(rowPosition, columnPosition);
+			parent.setCursorPosition(rowPosition, columnPosition);
 			
 			////////////////////////////////////////////////////////////////
 			// 2. cell type 설정
@@ -301,7 +299,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			// 7. 후처리 
 			//    Worksheet의 Cursor를 다음 칸으로 이동 시킴
 			//
-			copy.moveCursorToNextPosition();
+			parent.moveCursorToNextPosition();
 			
 		} catch(FormatterException fex) {
 			throw fex;
@@ -353,5 +351,4 @@ public class CellFormatter extends AbstractExcelFormatter {
 			break;
 		}
 	}
-
 }

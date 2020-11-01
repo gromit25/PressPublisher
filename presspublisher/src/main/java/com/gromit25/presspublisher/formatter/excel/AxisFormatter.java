@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.AxisPosition;
@@ -28,17 +29,11 @@ public class AxisFormatter extends AbstractChartComponent {
 	private String title;
 
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		//
-		if(false == (copyObj instanceof AxesFormatter)) {
-			throw new FormatterException(this, "Invalid Formatter(AxesFormatter expected).");
-		}
-		
-		//
 		try {
 			
-			AxesFormatter copy = (AxesFormatter)copyObj;
+			AxesFormatter copy = this.getParent(AxesFormatter.class);
 			
 			// category-axis인지, value-axis인지에 따라
 			// 설정을 함

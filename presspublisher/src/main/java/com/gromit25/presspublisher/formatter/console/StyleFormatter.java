@@ -59,28 +59,36 @@ public class StyleFormatter extends AbstractConsoleFormatter {
 	}
 	
 	@Override
-	public void formatConsole(OutputStream copy, Charset charset, ValueContainer values) throws FormatterException {
+	public void formatConsole(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 파라미터 정상 여부 확인
+		// 입력값 검증
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
+		}
+		
+		if(charset == null) {
+			throw new FormatterException(this, "Charset is null.");
+		}
+		
 		if(values == null) {
-			throw new FormatterException(this, "N/A(Value Container is null");
+			throw new FormatterException(this, "Value Container is null.");
 		}
 		
 		try {
 			// 현재 설정된 style을
 			// 순서대로 모두 적용함 
 			for(ConsoleStyle style: this.getStyleTypes()) {
-				copy.write(style.getCode().getBytes(charset));
+				out.write(style.getCode().getBytes(charset));
 			}
 	
 			// 자식 formatter들을 수행 
-			this.execChildFormatters(copy, charset, values);
+			this.execChildFormatters(out, charset, values);
 			
 			// 모든 text를 추가 완료하면,
 			// 현재 style을 초기화 시킴
-			copy.write(ConsoleStyle.RESET.getCode().getBytes(charset));
+			out.write(ConsoleStyle.RESET.getCode().getBytes(charset));
 			
-			copy.flush();
+			out.flush();
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}

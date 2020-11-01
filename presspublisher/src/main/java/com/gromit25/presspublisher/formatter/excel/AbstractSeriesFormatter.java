@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
@@ -63,23 +64,18 @@ public abstract class AbstractSeriesFormatter extends AbstractChartComponent {
 	}
 	
 	@Override
-	public void format(Object copyObj, Charset charset, ValueContainer values) throws FormatterException {
-		
-		// 입력값 검증
-		if(false == (copyObj instanceof ChartFormatter)) {
-			throw new FormatterException(this, "Invalid Formatter(ChartFormatter expected).");
-		}
+	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		try {
 			
 			// 1. chart formatter를 casting 하고
 			//    하위 컴포넌트에서 사용할 수 있도록 member변수(worksheet)를 설정함
-			ChartFormatter copy = (ChartFormatter)copyObj;
+			ChartFormatter copy = this.getParent(ChartFormatter.class);
 			this.setWorksheet(copy.getWorksheet());
 			
 			// 2. 하위 컴포넌트를 실행하여,
 			//    categoryDS, dataDS를 설정함
-			this.execChildFormatters(this, charset, values);
+			this.execChildFormatters(out, charset, values);
 			
 			// 3. chart data 객체 생성
 			XDDFChartData chartData = this.createChartData(copy);
