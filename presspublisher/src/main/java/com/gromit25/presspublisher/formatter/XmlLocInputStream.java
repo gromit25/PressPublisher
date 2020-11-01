@@ -26,10 +26,8 @@ public class XmlLocInputStream extends InputStream {
 		TAG_END,
 		QUOTO_STRING,
 		QUOTO_ESCAPE,
-		D_QUOTO_START,
 		D_QUOTO_STRING,
-		D_QUOTO_ESCAPE,
-		D_QUOTO_END
+		D_QUOTO_ESCAPE
 	}
 	
 	@Getter
@@ -248,7 +246,7 @@ public class XmlLocInputStream extends InputStream {
 			} else if(ch == '\'') {
 				this.setStatus(ParsingStatus.QUOTO_STRING);
 			} else if(ch == '"') {
-				this.setStatus(ParsingStatus.D_QUOTO_START);
+				this.setStatus(ParsingStatus.D_QUOTO_STRING);
 			}
 			
 			break;
