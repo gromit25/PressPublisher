@@ -15,6 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterAttrSetter;
 import com.gromit25.presspublisher.formatter.FormatterAttrSetterClass;
+import com.gromit25.presspublisher.formatter.excel.chart.DataSourceTypes;
 
 /**
  * 엑셀 객체에 대한 XML 속성값(스트링)을 파싱하여 설정하는 클래스
