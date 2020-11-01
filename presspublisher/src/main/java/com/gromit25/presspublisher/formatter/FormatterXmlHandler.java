@@ -41,28 +41,37 @@ import lombok.Setter;
 public abstract class FormatterXmlHandler extends DefaultHandler {
 
 	/** 생성 가능한 formatter의 목록 */
-	@Getter(value=AccessLevel.PRIVATE)
-	@Setter(value=AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private HashMap<String, Class<?>> formatterTypes = new HashMap<String, Class<?>>();
 
-	@Getter(value=AccessLevel.PRIVATE)
-	@Setter(value=AccessLevel.PRIVATE)
+	@Getter(AccessLevel.PRIVATE)
+	@Setter(AccessLevel.PRIVATE)
 	private HashMap<Class<?>, Method> attrSetters = new HashMap<Class<?>, Method>();
 	
 	/** 부모 Formatter stack */
-	@Getter(value=AccessLevel.PROTECTED)
+	@Getter(AccessLevel.PROTECTED)
 	private Stack<Formatter> parentFormatterStack = new Stack<Formatter>();
 	
 	/** parsing 중인 현재 Formatter */
 	@Getter
-	@Setter(value=AccessLevel.PROTECTED)
+	@Setter(AccessLevel.PROTECTED)
 	private Formatter formatter;
 	
-	/** 현재 parsing 위치 */
-	@Getter(value=AccessLevel.PROTECTED)
-	@Setter(value=AccessLevel.PRIVATE)
+	/**
+	 * xml inputstream 객체
+	 * -> xml의 현재 parsing 위치 확인용으로
+	 *    Formatter에 위치를 설정함
+	 *    FormatterException 발생시 발생위치 표시를 위함
+	 */
+	@Getter
+	@Setter
+	private XmlLocInputStream locInputStream;
+	
+	@Getter
+	@Setter(AccessLevel.PRIVATE)
 	private Locator locator;
-
+	
 	/**
 	 * 사용할 Formatter 그룹명을 반환
 	 * @return 사용할 Formatter 그룹명
@@ -175,7 +184,6 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	
 	@Override
 	public void setDocumentLocator(Locator locator) {
-		// 현재 parsing 중인 위치 객체 설정
 		this.setLocator(locator);
 	}
 	
@@ -204,7 +212,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 		// parsing 중인 formatter가 있으면,
 		// 현재 formatter의 상위 formatter 이므로,
 		// 상위 formatter stak에 push 함
-		if(this.getFormatter() != null) {
+		if(null != this.getFormatter()) {
 			this.getParentFormatterStack().push(this.getFormatter());
 		}
 		
@@ -225,8 +233,11 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			this.getFormatter().setTagName(qName);
 			
 			// formatter에 테그 종료 위치 설정
-			this.getFormatter().setLineNumber(this.getLocator().getLineNumber());
-			this.getFormatter().setColumnNumber(this.getLocator().getColumnNumber());
+			// locator의 line/column number는 tag의 종료 line/column 위치를 반환함 
+			Loc tagEndLoc = new Loc(this.getLocator().getLineNumber(), this.getLocator().getColumnNumber());
+			Loc tagStartLoc = this.getLocInputStream().findTagStartLoc(qName, tagEndLoc);
+			this.getFormatter().setLineNumber(tagStartLoc.getLineNum());
+			this.getFormatter().setColumnNumber(tagStartLoc.getColumnNum());
 			
 			//
 			this.processFormatterAttrAnnotation(this.getFormatter(), attributes);
@@ -267,7 +278,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
     
 	@Override
     public void characters (char ch[], int start, int length) throws SAXException {
-    	
+		
 		/////////////////////
 		// tag 내의 텍스트 처리
 		
@@ -359,5 +370,4 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 
 		} // End of for
 	}
-
 }

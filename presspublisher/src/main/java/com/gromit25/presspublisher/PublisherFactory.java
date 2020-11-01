@@ -10,6 +10,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import com.gromit25.presspublisher.formatter.FormatterXmlHandler;
+import com.gromit25.presspublisher.formatter.XmlLocInputStream;
 
 /**
  * 구체화 Publisher(concrete publisher) 생성 Factory 클래스
@@ -42,8 +43,9 @@ public class PublisherFactory {
 
         SAXParser formatXmlParser = factory.newSAXParser();
         FormatterXmlHandler formatXmlHandler = publisher.createXmlHandler();
+        formatXmlHandler.setLocInputStream(new XmlLocInputStream(formatXmlInput));
         
-        formatXmlParser.parse(formatXmlInput, formatXmlHandler);
+        formatXmlParser.parse(formatXmlHandler.getLocInputStream(), formatXmlHandler);
         publisher.setRootFormatter(formatXmlHandler.getFormatter());
         
         // 4. publisher 반환

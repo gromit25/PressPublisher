@@ -77,6 +77,22 @@ public class FormatterException extends Exception {
 	}
 	
 	/**
+	 * Exception이 발생한 Formatter의 Line 번호를 반환
+	 * @return Exception이 발생한 Formatter의 Line 번호
+	 */
+	public int getLineNumber() {
+		return this.getFormatter().getLineNumber();
+	}
+	
+	/**
+	 * Exception이 발생한 Formatter의 Column 번호를 반환
+	 * @return Exception이 발생한 Formatter의 Column 번호
+	 */
+	public int getColumnNumber() {
+		return this.getFormatter().getColumnNumber();
+	}
+	
+	/**
 	 * 예외 발생 위치를 문자열로 변환하여 반환
 	 * @return 예외 발생 위치 문자열
 	 */
@@ -86,9 +102,9 @@ public class FormatterException extends Exception {
 		
 		locMessage.append("Formatter XML tag at:")
 			.append(" Line:")
-			.append(this.getFormatter().getLineNumber())
+			.append(this.getLineNumber())
 			.append(", Column:")
-			.append(this.getFormatter().getColumnNumber())
+			.append(this.getColumnNumber())
 			.append(", tag name:")
 			.append(this.getFormatter().getTagName());
 		

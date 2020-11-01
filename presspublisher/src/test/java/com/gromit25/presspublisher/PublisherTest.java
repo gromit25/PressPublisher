@@ -6,11 +6,11 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import com.gromit25.presspublisher.Publisher;
-import com.gromit25.presspublisher.PublisherFactory;
-import com.gromit25.presspublisher.PublisherType;
+import org.xml.sax.SAXException;
+
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.evaluator.ValueInstance;
+import com.gromit25.presspublisher.formatter.FormatterException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -186,6 +186,108 @@ public class PublisherTest extends TestCase
     		
     		ex.printStackTrace();
     		assertTrue(false);
+    	}
+    }
+    
+    public void testFormatterException() {
+    	
+    	ValueContainer values = new ValueContainer();
+    	
+    	try {
+    		
+    		String formatStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+    				"<format>\r\n" + 
+    				"\r\n" + 
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	|   한글:<print exp=\"%%\"/>\r\n" +
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	\r\n" + 
+    				"</format>";
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.CONSOLE, formatStr);
+    		publisher.publish(null, Charset.defaultCharset(), values);
+    		
+    		assertTrue(false);
+    		
+    	} catch(SAXException saxex) {
+    		
+    		saxex.printStackTrace();
+    		assertTrue(saxex.getException() instanceof FormatterException);
+    		
+    		FormatterException fex = (FormatterException)saxex.getException();
+    		assertTrue(5 == fex.getLineNumber());
+    		assertTrue(8 == fex.getColumnNumber());
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    		
+    	}
+    	
+    	try {
+    		
+    		String formatStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+    				"<format>\r\n" + 
+    				"\r\n" + 
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	|   한글:<print \r\n" +
+    				"            exp=\"%%\"/>\r\n" +
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	\r\n" + 
+    				"</format>";
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.CONSOLE, formatStr);
+    		publisher.publish(null, Charset.defaultCharset(), values);
+    		
+    		assertTrue(false);
+    		
+    	} catch(SAXException saxex) {
+    		
+    		saxex.printStackTrace();
+    		assertTrue(saxex.getException() instanceof FormatterException);
+    		
+    		FormatterException fex = (FormatterException)saxex.getException();
+    		assertTrue(5 == fex.getLineNumber());
+    		assertTrue(8 == fex.getColumnNumber());
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    		
+    	}
+    	
+    	try {
+    		
+    		String formatStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+    				"<format>\r\n" + 
+    				"\r\n" + 
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	|   한글테스트:<print/>\r\n" +
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	\r\n" + 
+    				"</format>";
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.CONSOLE, formatStr);
+    		publisher.publish(null, Charset.defaultCharset(), values);
+    		
+    		assertTrue(false);
+    		
+    	} catch(SAXException saxex) {
+    		
+    		saxex.printStackTrace();
+    		assertTrue(saxex.getException() instanceof FormatterException);
+    		
+    		FormatterException fex = (FormatterException)saxex.getException();
+    		assertTrue(5 == fex.getLineNumber());
+    		assertTrue(11 == fex.getColumnNumber());
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    		
     	}
     }
     
