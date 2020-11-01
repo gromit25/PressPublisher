@@ -1,4 +1,4 @@
-package com.gromit25.presspublisher.formatter.excel;
+package com.gromit25.presspublisher.formatter.excel.chart;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -11,6 +11,7 @@ import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
+import com.gromit25.presspublisher.formatter.excel.RangeEval;
 
 import lombok.Getter;
 import lombok.Setter;

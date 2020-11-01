@@ -1,4 +1,4 @@
-package com.gromit25.presspublisher.formatter.excel;
+package com.gromit25.presspublisher.formatter.excel.chart;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;

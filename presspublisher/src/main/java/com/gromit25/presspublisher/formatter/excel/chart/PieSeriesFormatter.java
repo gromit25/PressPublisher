@@ -1,4 +1,4 @@
-package com.gromit25.presspublisher.formatter.excel;
+package com.gromit25.presspublisher.formatter.excel.chart;
 
 import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.XDDFChartData;
