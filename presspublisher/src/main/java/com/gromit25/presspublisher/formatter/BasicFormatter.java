@@ -1,12 +1,10 @@
-package com.gromit25.presspublisher.formatter.flow;
+package com.gromit25.presspublisher.formatter;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
-import com.gromit25.presspublisher.formatter.Formatter;
-import com.gromit25.presspublisher.formatter.FormatterException;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +18,7 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public class BasicFlowFormatter extends AbstractFlowFormatter {
+public class BasicFormatter extends Formatter {
 	
 	/**
 	 * 하위 Formatter 목록
