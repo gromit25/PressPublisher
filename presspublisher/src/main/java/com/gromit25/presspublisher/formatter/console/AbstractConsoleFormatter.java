@@ -7,6 +7,7 @@ import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.flow.AbstractFlowFormatter;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 import com.gromit25.presspublisher.formatter.text.AbstractTextFormatter;
 
 /**
@@ -14,7 +15,7 @@ import com.gromit25.presspublisher.formatter.text.AbstractTextFormatter;
  * 
  * @author jmsohn
  */
-public abstract class AbstractConsoleFormatter extends AbstractFlowFormatter {
+public abstract class AbstractConsoleFormatter extends BasicFlowFormatter {
 	
 	/**
 	 * console에 출력작업 수행

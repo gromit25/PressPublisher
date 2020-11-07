@@ -14,6 +14,17 @@ import com.gromit25.presspublisher.evaluator.Evaluator;
 public class CommonAttrSetter {
 	
 	/**
+	 * 
+	 * @param formatter 속성을 지정할 formatter 객체
+	 * @param setMethod formatter의 속성값 setMethod
+	 * @param attrValue formatter에 설정할 속성의 문자열값
+	 */
+	@FormatterAttrSetter(Class.class)
+	public static void setClass(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Class.forName(attrValue));
+	}
+	
+	/**
 	 * String type의 속성 설정 메서드
 	 *   FormatterAttrSetter 어노테이션 주석 참조
 	 * @param formatter 속성을 지정할 formatter 객체
@@ -72,4 +83,5 @@ public class CommonAttrSetter {
 	public static void setEvaluator(Formatter formatter, Method setMethod, String attrValue) throws Exception {
 		setMethod.invoke(formatter, Evaluator.compile(attrValue));
 	}
+	
 }

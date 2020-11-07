@@ -4,17 +4,17 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
-import com.gromit25.presspublisher.formatter.BasicFormatter;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.flow.AbstractFlowFormatter;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
 /**
  * 텍스트 처리용 Formatter의 추상 클래스
  * 
  * @author jmsohn
  */
-public abstract class AbstractTextFormatter extends BasicFormatter {
+public abstract class AbstractTextFormatter extends BasicFlowFormatter {
 	
 	/**
 	 * OutputStream에 텍스트 출력작업 수행

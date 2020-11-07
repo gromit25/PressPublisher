@@ -459,4 +459,42 @@ public class PublisherTest extends TestCase
 		}
 
     }
+    
+    /**
+     * custom 테그 테스트
+     */
+    public void testCustom() {
+    	
+    	try {
+    		
+    		ValueContainer values = new ValueContainer();
+    		
+    		ArrayList<String> messages = new ArrayList<String>();
+    		messages.add("test message 1");
+    		messages.add("test message 2");
+    		
+    		values.put("messages", messages);
+    		
+    		String formatStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+    				"<format>\r\n" + 
+    				"\r\n" + 
+    				"	|   CUSTOM TAG TEST\r\n" + 
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	|   <custom class=\"com.gromit25.presspublisher.CustomShowMessages\"/>\r\n" + 
+    				"	|   --------------------------------------------------------------------------\r\n" + 
+    				"	\r\n" + 
+    				"</format>";
+    		
+    		Publisher stringpublisher = PublisherFactory.create(PublisherType.CONSOLE, formatStr);
+    		stringpublisher.publish(null, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    		
+    	}
+    }
 }

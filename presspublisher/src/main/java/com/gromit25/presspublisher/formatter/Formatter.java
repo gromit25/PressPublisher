@@ -61,8 +61,17 @@ public abstract class Formatter {
 	 * @param formatter 새로운 formatter
 	 */
 	public abstract void addChildFormatter(Formatter formatter) throws FormatterException;
-	
-	// formatting 수행 메소드
+
+	/**
+	 * 
+	 * @param formatter
+	 */
+	public void copy(Formatter formatter) {
+		formatter.setTagName(this.getTagName());
+		formatter.setColumnNumber(this.getColumnNumber());
+		formatter.setLineNumber(this.getLineNumber());
+		formatter.setParent(this.getParent());
+	}
 	
 	/**
 	 * formatter에 설정된 내용과 value container에 저장된 값을 이용하여

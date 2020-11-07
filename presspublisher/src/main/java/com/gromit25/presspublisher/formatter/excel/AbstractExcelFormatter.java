@@ -4,15 +4,15 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
-import com.gromit25.presspublisher.formatter.BasicFormatter;
 import com.gromit25.presspublisher.formatter.FormatterException;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
 /**
  * Excel의 Cell 출력용 Formatter의 추상 클래스
  * 
  * @author jmsohn
  */
-public abstract class AbstractExcelFormatter extends BasicFormatter {
+public abstract class AbstractExcelFormatter extends BasicFlowFormatter {
 
 	/**
 	 * excel에 출력작업 수행

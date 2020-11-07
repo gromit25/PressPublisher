@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
-import com.gromit25.presspublisher.formatter.BasicFormatter;
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterException;
 
@@ -24,7 +23,7 @@ public abstract class AbstractFlowComponentFormatter extends AbstractFlowFormatt
 	 */
 	@Getter
 	@Setter
-	private BasicFormatter basicFlowFormatter;
+	private BasicFlowFormatter basicFlowFormatter;
 
 	@Override
 	public void addText(String text) throws FormatterException {

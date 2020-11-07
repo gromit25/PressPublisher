@@ -6,10 +6,10 @@ import java.nio.charset.Charset;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
-import com.gromit25.presspublisher.formatter.BasicFormatter;
 import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +22,7 @@ import lombok.Setter;
  * @author jmsohn
  */
 @FormatterSpec(group="excel", tag="worksheet")
-public class WorksheetFormatter extends BasicFormatter {
+public class WorksheetFormatter extends BasicFlowFormatter {
 	
 	/** worksheet 명(필수) */
 	@Getter

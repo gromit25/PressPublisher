@@ -3,9 +3,9 @@ package com.gromit25.presspublisher.formatter.excel;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.gromit25.presspublisher.formatter.BasicFormatter;
 import com.gromit25.presspublisher.formatter.FormatterXmlHandler;
 import com.gromit25.presspublisher.formatter.flow.AbstractFlowComponentFormatter;
+import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 import com.gromit25.presspublisher.formatter.text.TextFlowFormatter;
 
 /**
@@ -47,7 +47,7 @@ public class ExcelFormatterXmlHandler extends FormatterXmlHandler {
 		if(this.hasCellFormatterInParents() == true) {
 			formatter.setBasicFlowFormatter(new TextFlowFormatter());
 		} else {
-			formatter.setBasicFlowFormatter(new BasicFormatter());
+			formatter.setBasicFlowFormatter(new BasicFlowFormatter());
 		}
 	}
 	
