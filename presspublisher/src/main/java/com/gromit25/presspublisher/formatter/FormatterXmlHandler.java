@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Stack;
 
-import org.reflections.Reflections;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -102,6 +101,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 		
 		this.loadFormatterTypes(reflect);
 		this.loadFormatterAttrSetter(reflect);
+
 	}
 	
 	/**
