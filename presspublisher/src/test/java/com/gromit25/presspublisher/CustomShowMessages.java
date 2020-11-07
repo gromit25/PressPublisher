@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
@@ -21,6 +22,10 @@ public class CustomShowMessages extends Formatter{
 
 	@Override
 	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
-		System.out.println("TEST");
+		try {
+			out.write("THIS IS A CUSTOM MESSAGE.".getBytes());
+		} catch (IOException ex) {
+			throw new FormatterException(this, ex);
+		}
 	}
 }
