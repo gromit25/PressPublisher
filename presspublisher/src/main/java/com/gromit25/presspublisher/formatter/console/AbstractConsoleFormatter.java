@@ -29,7 +29,7 @@ public abstract class AbstractConsoleFormatter extends BasicFlowFormatter {
 	public void addChildFormatter(Formatter formatter) throws FormatterException {
 		
 		if(formatter == null) {
-			throw new FormatterException(this, "formatter is null");
+			throw new FormatterException(this, "formatter is null.");
 		}
 		
 		// 추가되는 Formatter가 TextFormatter나 FlowFormatter가 아닐 경우, 예외 발생
@@ -42,7 +42,7 @@ public abstract class AbstractConsoleFormatter extends BasicFlowFormatter {
 	}
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		try {
 			this.formatConsole(out, charset, values);

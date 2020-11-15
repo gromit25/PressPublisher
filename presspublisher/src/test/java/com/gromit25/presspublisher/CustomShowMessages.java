@@ -21,7 +21,7 @@ public class CustomShowMessages extends Formatter{
 	}
 
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		try {
 			out.write("THIS IS A CUSTOM MESSAGE.".getBytes());
 		} catch (IOException ex) {

@@ -146,6 +146,31 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * 엑셀 템플릿을 이용한 엑셀 파일 출력 테스트
+     */
+    public void testPublishToExcelTemplate() {
+    	
+    	File outFile = new File("D:\\testExcelTemplate.xlsx");
+    	File formatFile = new File("resources/testExcelTemplate.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ValueContainer values = new ValueContainer();
+    		values.importStaticClass("Integer", Integer.class);
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * 엑셀 Line Chart 출력 테스트
      */
     public void testPublishLineChartToExcel() {

@@ -51,15 +51,6 @@ public class TextFormatter extends AbstractTextFormatter {
 	@Override
 	public void formatText(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(charset == null) {
-			throw new FormatterException(this, "Charset is null.");
-		}
-		
 		try {
 			// Output stream에 출력 수행
 			out.write(this.getMessage().getBytes(charset));

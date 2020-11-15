@@ -1,5 +1,8 @@
 package com.gromit25.presspublisher.formatter.excel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
 import org.apache.poi.ss.usermodel.CellType;
@@ -11,10 +14,12 @@ import org.apache.poi.xddf.usermodel.chart.ChartTypes;
 import org.apache.poi.xddf.usermodel.chart.LegendPosition;
 import org.apache.poi.xddf.usermodel.chart.MarkerStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gromit25.presspublisher.formatter.Formatter;
 import com.gromit25.presspublisher.formatter.FormatterAttrSetter;
 import com.gromit25.presspublisher.formatter.FormatterAttrSetterClass;
+import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.excel.chart.DataSourceTypes;
 
 /**
@@ -25,7 +30,27 @@ import com.gromit25.presspublisher.formatter.excel.chart.DataSourceTypes;
 @FormatterAttrSetterClass
 public class ExcelAttrSetter {
 	
-	//
+	/**
+	 * 
+	 * @param formatter
+	 * @param setMethod
+	 * @param attrValue
+	 */
+	@FormatterAttrSetter(XSSFWorkbook.class)
+	public static void setWorkbook(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+
+		//
+		File templateFile = new File(attrValue);
+		if(false == templateFile.canRead()) {
+			throw new FormatterException(formatter, "Can't read " + attrValue);
+		}
+		
+		//
+		try(InputStream templateIS = new FileInputStream(templateFile)) {
+			XSSFWorkbook template = new XSSFWorkbook(templateIS);
+			setMethod.invoke(formatter, template);
+		}
+	}
 	
 	/**
 	 * RowColumnEval type의 속성 설정 메서드

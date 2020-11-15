@@ -23,7 +23,7 @@ public abstract class AbstractExcelFormatter extends BasicFlowFormatter {
 	protected abstract void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException;
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 
 		try {
 			this.formatExcel(out, charset, values);

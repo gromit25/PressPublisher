@@ -2,6 +2,7 @@ package com.gromit25.presspublisher.formatter;
 
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Vector;
 
 import org.xml.sax.Attributes;
 
@@ -39,6 +40,10 @@ public abstract class Formatter {
 	@Setter(AccessLevel.PACKAGE)
 	private Formatter parent;
 	
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
+	private Vector<FormulaSetter> formulaSetters = new Vector<FormulaSetter>();
+	
 	// xml에서 Formatter 생성시, callback되는 메소드 목록
 	
 	/**
@@ -61,17 +66,6 @@ public abstract class Formatter {
 	 * @param formatter 새로운 formatter
 	 */
 	public abstract void addChildFormatter(Formatter formatter) throws FormatterException;
-
-	/**
-	 * 
-	 * @param formatter
-	 */
-	public void copy(Formatter formatter) {
-		formatter.setTagName(this.getTagName());
-		formatter.setColumnNumber(this.getColumnNumber());
-		formatter.setLineNumber(this.getLineNumber());
-		formatter.setParent(this.getParent());
-	}
 	
 	/**
 	 * formatter에 설정된 내용과 value container에 저장된 값을 이용하여
@@ -80,7 +74,41 @@ public abstract class Formatter {
 	 * @param charset 출력시 사용할 character set
 	 * @param values value container
 	 */
-	public abstract void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException;
+	protected abstract void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException;
+	
+	/**
+	 * 
+	 * @param out 출력 스트림
+	 * @param charset 출력시 사용할 character set
+	 * @param values value container
+	 */
+	public final void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+		
+		// 입력값 검증
+		if(out == null) {
+			throw new FormatterException(this, "out param is null.");
+		}
+		
+		if(charset == null) {
+			throw new FormatterException(this, "charset is null.");
+		}
+		
+		if(values == null) {
+			throw new FormatterException(this, "value container is null.");
+		}
+		
+		//
+		for(FormulaSetter attrSetter: this.getFormulaSetters()) {
+			try {
+				attrSetter.setData(this, values);
+			} catch(Exception ex) {
+				throw new FormatterException(this, ex);
+			}
+		}
+		
+		//
+		this.execFormat(out, charset, values);
+	}
 	
 	/**
 	 * 
@@ -104,5 +132,18 @@ public abstract class Formatter {
 		}
 		
 		return type.cast(parent);
+	}
+	
+	/**
+	 * 
+	 * @param formatter
+	 */
+	public void copy(Formatter formatter) {
+		
+		formatter.setTagName(this.getTagName());
+		formatter.setColumnNumber(this.getColumnNumber());
+		formatter.setLineNumber(this.getLineNumber());
+		formatter.setParent(this.getParent());
+		
 	}
 }

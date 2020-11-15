@@ -362,9 +362,23 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 			
 			// 5. setter 메소드를 호출하여 formatter에 속성을 설정함
 			//    setter 메소드는 필드의 type(class)에 따라 속성 값을 변환하여,
-			//    formatter 객체의 settter 메소드를 호출함
+			//    formatter 객체의 setter 메소드를 호출함
+			//
+			//    만일, "=" 으로 시작하면, 수식으로 추후에 실행시 계산하는 값임
+			//    Formatter.format 함수 수행시 계산됨
+			//    -> 추후 계산을 위해, formatter 객체에 수식 설정자(FormulaSetter)를 설정함
 			try {
-				setterMethod.invoke(null, formatter, pd.getWriteMethod(), attrValue);
+				
+				if(true == attrValue.startsWith("=")) {
+					// "=" 제거함
+					attrValue = attrValue.substring(1);
+					// 수식 설정자(FormulaSetter) 추가
+					formatter.getFormulaSetters()
+						.add(new FormulaSetter(attrValue, setterMethod, pd.getWriteMethod()));
+				} else {
+					setterMethod.invoke(null, formatter, pd.getWriteMethod(), attrValue);
+				}
+				
 			} catch(Exception ex) {
 				throw new FormatterException(formatter, attrAnnotation.name(), ex);
 			}

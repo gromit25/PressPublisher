@@ -45,7 +45,7 @@ public class BasicFlowFormatter extends AbstractFlowFormatter {
 	}
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		this.execChildFormatters(out, charset, values);
 	}
 	
@@ -71,7 +71,13 @@ public class BasicFlowFormatter extends AbstractFlowFormatter {
 		
 		// 하위 formatter들을 하나씩 수행함
 		for(Formatter formatter: this.getChildFormatterList()) {
-			formatter.format(out, charset, values);
+			try {
+				formatter.format(out, charset, values);
+			} catch(FormatterException fex) {
+				throw fex;
+			} catch(Exception ex) {
+				throw new FormatterException(formatter, ex);
+			}
 		}
 	}
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook template="resources/org.xlsx">
+	<for initExp="index = 0" condExp="index &lt; 2" stepExp="index = index+1">
+		<worksheet name="='Test' + Integer.toString(index)" cloneFrom="Template1">
+			<cursor position="2:1"/>
+			<rowcells>
+				<cell type="NUMERIC">|<print exp="1000*(index + 1)"/></cell>
+				<cell type="NUMERIC">|2</cell>
+			</rowcells>
+		</worksheet>
+	</for>
+	<worksheet name="Template1" remove="TRUE"/>
+</workbook>

@@ -68,7 +68,7 @@ public class ForeachFormatter extends AbstractFlowComponentFormatter {
 	}
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 검증
 		if(out == null) {

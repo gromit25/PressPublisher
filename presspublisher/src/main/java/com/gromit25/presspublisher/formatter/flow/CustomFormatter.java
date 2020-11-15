@@ -36,7 +36,7 @@ public class CustomFormatter extends BasicFlowFormatter {
 	}
 
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		try {
 			
 			if(false == Formatter.class.isAssignableFrom(this.getCustomClass())) {

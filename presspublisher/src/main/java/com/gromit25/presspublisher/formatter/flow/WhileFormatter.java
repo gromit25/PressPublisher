@@ -34,7 +34,7 @@ public class WhileFormatter extends AbstractFlowComponentFormatter {
 	private Evaluator exp;
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 입력값 체크
 		if(out == null) {

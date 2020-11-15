@@ -30,6 +30,17 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	@FormatterAttr(name="name", mandatory=true)
 	private String name;
 	
+	/** */
+	@Getter
+	@Setter
+	@FormatterAttr(name="cloneFrom", mandatory=false)
+	private String cloneFrom;
+	
+	@Getter
+	@Setter
+	@FormatterAttr(name="remove", mandatory=false)
+	private boolean remove = false;
+	
 	@Getter
 	@Setter(AccessLevel.PRIVATE)
 	private XSSFSheet worksheet;
@@ -41,6 +52,11 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	/** 커서의 Column 위치(default 값 : 0) */
 	@Getter
 	private int cursorColumnPosition = 0;
+	
+	/** Cell 등에 대해 처리 완료된 경우 자동으로 이동할 커서 이동 방향(default값 :DOWN)*/
+	@Getter
+	@Setter
+	private CursorDirection cursorDirection = CursorDirection.DOWN;
 	
 	/** 커서 이동 방향 enum */
 	public enum CursorDirection {
@@ -68,37 +84,49 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 		 */
 		public abstract void move(WorksheetFormatter worksheet);
 	}
-	
-	/** Cell 등에 대해 처리 완료된 경우 자동으로 이동할 커서 이동 방향(default값 :DOWN)*/
-	@Getter
-	@Setter
-	private CursorDirection cursorDirection = CursorDirection.DOWN;
 
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// workbook formatter 설정
 		WorkbookFormatter workbook = null;
 		try {
-			workbook = this.getParent(WorkbookFormatter.class);
+			workbook = this.getParentInBranch(WorkbookFormatter.class);
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
-		
+
+		// cloneFrom 이 설정 되지 않은 경우,
 		// 설정된 worksheet명으로 worksheet 생성 및 활성화 sheet(active sheet)로 설정
 		// worksheet가 없을 경우, 새로 만듦
-		XSSFSheet sheet = workbook.getWorkbook().getSheet(this.getName());
-		if(sheet == null) {
-			sheet = workbook.getWorkbook().createSheet(this.getName());
+		if(null == this.getCloneFrom()) {
+			XSSFSheet sheet = workbook.getWorkbook().getSheet(this.getName());
+			if(sheet == null) {
+				sheet = workbook.getWorkbook().createSheet(this.getName());
+			}
+			this.setWorksheet(sheet);
 		}
-		this.setWorksheet(sheet);
+		// cloneFrom 설정되어 있는 경우,
+		// cloneFrom Sheet에서 clone을 생성하여, 설정함
+		else {
+			int cloneFromIndex = workbook.getWorkbook().getSheetIndex(this.getCloneFrom());
+			XSSFSheet sheet = workbook.getWorkbook().cloneSheet(cloneFromIndex, this.getName());
+			this.setWorksheet(sheet);
+		}
 		
+		// 활성시트를 현재 시트로 설정함
 		workbook.getWorkbook().setActiveSheet(
 			workbook.getWorkbook().getSheetIndex(this.getName())
 		);
-		
+	
 		// worksheet의 자식 formatter 수행
 		this.execChildFormatters(out, charset, values);
+		
+		// 만일 remove 설정이 되어 있으면, 현 worksheet를 삭제함
+		if(true == this.isRemove()) {
+			int index = workbook.getWorkbook().getSheetIndex(this.getName());
+			workbook.getWorkbook().removeSheetAt(index);
+		}
 		
 		// 첫 worksheet로 active worksheet를 변경
 		workbook.getWorkbook().setActiveSheet(0);

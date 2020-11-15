@@ -54,19 +54,6 @@ public class PrintFormatter extends AbstractTextFormatter {
 	@Override
 	public void formatText(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(charset == null) {
-			throw new FormatterException(this, "Charset is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		// 표현식(exp)을 수행한 후
 		// 수행 결과 값을 반환함
 		try {

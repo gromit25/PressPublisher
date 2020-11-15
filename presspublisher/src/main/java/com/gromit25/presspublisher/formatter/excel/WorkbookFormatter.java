@@ -6,11 +6,11 @@ import java.nio.charset.Charset;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
+import com.gromit25.presspublisher.formatter.FormatterAttr;
 import com.gromit25.presspublisher.formatter.FormatterException;
 import com.gromit25.presspublisher.formatter.FormatterSpec;
 import com.gromit25.presspublisher.formatter.flow.BasicFlowFormatter;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,15 +27,18 @@ public class WorkbookFormatter extends BasicFlowFormatter {
 	 * 하위 formatter에서 사용함
 	 */
 	@Getter
-	@Setter(value=AccessLevel.PRIVATE)
+	@Setter
+	@FormatterAttr(name="template", mandatory=false)
 	private XSSFWorkbook workbook;
 	
 	@Override
-	public void format(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
+	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
 		// 작업 workbook 설정
 		try {
-			this.setWorkbook(new XSSFWorkbook());
+			if(null == this.getWorkbook()) {
+				this.setWorkbook(new XSSFWorkbook());
+			}
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}
