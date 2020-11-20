@@ -80,11 +80,13 @@ public class WorkbookFormatter extends BasicFlowFormatter {
 					tempWorkbook = tempOutputStream.toByteArray();
 				}
 				
+				// 암호화 스펙 및 패스워드 설정
 				EncryptionInfo info = new EncryptionInfo(EncryptionMode.agile);
 				
 				Encryptor enc = info.getEncryptor();
 				enc.confirmPassword(this.getPassword());
 				
+				// 암호화 수행 및 출력
 				try(POIFSFileSystem fs = new POIFSFileSystem()) {
 					
 				    try(InputStream tempInputStream = new ByteArrayInputStream(tempWorkbook);
