@@ -29,12 +29,6 @@ public class ExcelPublisher extends Publisher {
 		// 엑셀 출력 수행
 		WorkbookFormatter root = (WorkbookFormatter)this.getRootFormatter();
 		root.format(out, charset, values);
-		
-		// 출력 완료 후 모든 수식 강제 재계산
-		root.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
-		
-		// 파일에 출력 
-		root.getWorkbook().write((OutputStream)out);
 	}
 
 }

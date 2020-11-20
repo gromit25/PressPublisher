@@ -171,6 +171,35 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * 엑셀파일 암호화 테스트
+     */
+    public void testPublishToEncryptedExcel() {
+    	
+    	File outFile = new File("D:\\testPublishEncrypted.xlsx");
+    	File formatFile = new File("resources/testExcelEncrypted.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ArrayList<String> messages = new ArrayList<String>();
+    		messages.add("test message 1");
+    		messages.add("test message 2");
+    		
+    		ValueContainer values = new ValueContainer();
+    		values.put("messages", messages);
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * 엑셀 Line Chart 출력 테스트
      */
     public void testPublishLineChartToExcel() {
