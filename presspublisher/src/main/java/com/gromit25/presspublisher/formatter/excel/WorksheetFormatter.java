@@ -33,8 +33,8 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	/** */
 	@Getter
 	@Setter
-	@FormatterAttr(name="cloneFrom", mandatory=false)
-	private String cloneFrom;
+	@FormatterAttr(name="copyFrom", mandatory=false)
+	private String copyFrom;
 	
 	@Getter
 	@Setter
@@ -99,7 +99,7 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 		// cloneFrom 이 설정 되지 않은 경우,
 		// 설정된 worksheet명으로 worksheet 생성 및 활성화 sheet(active sheet)로 설정
 		// worksheet가 없을 경우, 새로 만듦
-		if(null == this.getCloneFrom()) {
+		if(null == this.getCopyFrom()) {
 			XSSFSheet sheet = workbook.getWorkbook().getSheet(this.getName());
 			if(sheet == null) {
 				sheet = workbook.getWorkbook().createSheet(this.getName());
@@ -109,7 +109,7 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 		// cloneFrom 설정되어 있는 경우,
 		// cloneFrom Sheet에서 clone을 생성하여, 설정함
 		else {
-			int cloneFromIndex = workbook.getWorkbook().getSheetIndex(this.getCloneFrom());
+			int cloneFromIndex = workbook.getWorkbook().getSheetIndex(this.getCopyFrom());
 			XSSFSheet sheet = workbook.getWorkbook().cloneSheet(cloneFromIndex, this.getName());
 			this.setWorksheet(sheet);
 		}
