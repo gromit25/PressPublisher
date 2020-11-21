@@ -137,15 +137,6 @@ public class CellFormatter extends AbstractExcelFormatter {
 	@Override
 	public void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(charset == null) {
-			throw new FormatterException(this, "Charset is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-
 		try {
 			
 			////////////////////////////////////////////////////////////////
