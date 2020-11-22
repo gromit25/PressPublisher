@@ -15,6 +15,7 @@
 			<cell type="NUMERIC">|2</cell>
 			<cell type="FORMULA">|C1+D1</cell>
 			<cell type="FORMULA">|SUM(C1:E1)</cell>
+			<cell type="FORMULA">|AVERAGE($C$1:$E$1)</cell>
 		</rowcells>
 		<rowcells>
 			<cell copyFrom="0:0"/>
@@ -23,6 +24,7 @@
 			<cell copyFrom="0:3">|5</cell>
 			<cell copyFrom="0:4"/>
 			<cell copyFrom="0:5"/>
+			<cell copyFrom="0:6"/>
 		</rowcells>
 	</worksheet>
 	
