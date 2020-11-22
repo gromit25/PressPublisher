@@ -18,14 +18,14 @@ public class RowCellsFormatter extends AbstractExcelFormatter {
 	@Override
 	protected void formatExcel(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		WorksheetFormatter parent = this.getParentInBranch(WorksheetFormatter.class);
+		WorksheetFormatter sheetFormatter = this.getParentInBranch(WorksheetFormatter.class);
 		
 		// 1. Worksheet 하위 컴포넌트 수행 전 작업
 		//    - Worksheet의 Cell 수행 완료 후 자동 이동 방향을 오른쪽(RIGHT)로 변경
 		//    - Worksheet의 하위 컴포넌트 수행 후 원래의 컬럼 위치로 옮기기 위해,
 		//      현재 Worksheet의 커서의 컬럼값 저장
-		parent.setCursorDirection(WorksheetFormatter.CursorDirection.RIGHT);
-		int savedColumnPosition = parent.getCursorColumnPosition();
+		sheetFormatter.setCursorMoveDirection(WorksheetFormatter.CursorDirection.RIGHT);
+		int savedColumnPosition = sheetFormatter.getCursorColumnPosition();
 		
 		// 2. Worksheet의 하위 컴포넌트를 수행함
 		//    Parent는 Work
@@ -35,10 +35,10 @@ public class RowCellsFormatter extends AbstractExcelFormatter {
 		//    - Worksheet의 Cell 자동이동 방향을 원래 방향(DOWN)으로 변경
 		//    - Row를 한칸 아래로 설정
 		//    - Worksheet의 커서 컬럼을 원래대로 복구함
-		parent.setCursorDirection(WorksheetFormatter.CursorDirection.DOWN);
+		sheetFormatter.setCursorMoveDirection(WorksheetFormatter.CursorDirection.DOWN);
 		
-		parent.setCursorRowPosition(parent.getCursorRowPosition() + 1);
-		parent.setCursorColumnPosition(savedColumnPosition);
+		sheetFormatter.setCursorRowPosition(sheetFormatter.getCursorRowPosition() + 1);
+		sheetFormatter.setCursorColumnPosition(savedColumnPosition);
 		
 	}
 
