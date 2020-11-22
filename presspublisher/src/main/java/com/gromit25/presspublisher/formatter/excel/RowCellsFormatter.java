@@ -28,7 +28,6 @@ public class RowCellsFormatter extends AbstractExcelFormatter {
 		int savedColumnPosition = sheetFormatter.getCursorColumnPosition();
 		
 		// 2. Worksheet의 하위 컴포넌트를 수행함
-		//    Parent는 Work
 		this.execChildFormatters(out, charset, values);
 		
 		// 3. Worksheet 하위 컴포넌트 수행 후 작업
