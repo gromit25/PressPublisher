@@ -89,9 +89,9 @@ public class PublisherTest extends TestCase
     /**
      * 엑셀 파일 출력 테스트
      */
-    public void testPublishToExcel() {
+    public void testExcelformat() {
     	
-    	File outFile = new File("D:\\testPublish.xlsx");
+    	File outFile = new File("D:\\testExcelformat.xlsx");
     	File formatFile = new File("resources/testExcelformat.xml");
     	
     	try (OutputStream outExcel = new FileOutputStream(outFile)){
@@ -119,9 +119,9 @@ public class PublisherTest extends TestCase
     /**
      * 커서를 사용한 엑셀 파일 출력 테스트
      */
-    public void testPublishToExcelByUsingCursor() {
+    public void testExcelCursorFormat() {
     	
-    	File outFile = new File("D:\\testPublishByUsingCursor.xlsx");
+    	File outFile = new File("D:\\testCursorformat.xlsx");
     	File formatFile = new File("resources/testExcelCursorformat.xml");
     	
     	try (OutputStream outExcel = new FileOutputStream(outFile)) {
@@ -148,7 +148,7 @@ public class PublisherTest extends TestCase
     /**
      * Cell 복사 테스트
      */
-    public void testPublishToExcelCellCopy() {
+    public void testExcelCellCopy() {
     	
     	File outFile = new File("D:\\testExcelCellCopy.xlsx");
     	File formatFile = new File("resources/testExcelCellCopy.xml");
@@ -170,9 +170,33 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * row 삽입 테스트
+     */
+    public void testExcelInsertRow() {
+    	
+    	File outFile = new File("D:\\testExcelInsertRow.xlsx");
+    	File formatFile = new File("resources/testExcelInsertRow.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ValueContainer values = new ValueContainer();
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * 엑셀 템플릿을 이용한 엑셀 파일 출력 테스트
      */
-    public void testPublishToExcelTemplate() {
+    public void testExcelTemplate() {
     	
     	File outFile = new File("D:\\testExcelTemplate.xlsx");
     	File formatFile = new File("resources/testExcelTemplate.xml");
@@ -197,9 +221,9 @@ public class PublisherTest extends TestCase
     /**
      * 엑셀파일 암호화 테스트
      */
-    public void testPublishToEncryptedExcel() {
+    public void testExcelEncrypted() {
     	
-    	File outFile = new File("D:\\testPublishEncrypted.xlsx");
+    	File outFile = new File("D:\\testExcelEncrypted.xlsx");
     	File formatFile = new File("resources/testExcelEncrypted.xml");
     	
     	try (OutputStream outExcel = new FileOutputStream(outFile)) {
@@ -226,9 +250,9 @@ public class PublisherTest extends TestCase
     /**
      * 엑셀 Line Chart 출력 테스트
      */
-    public void testPublishLineChartToExcel() {
+    public void testExcelLineChart() {
     	
-    	File outFile = new File("D:\\testPublishLineChart.xlsx");
+    	File outFile = new File("D:\\testExcelLineChart.xlsx");
     	File formatFile = new File("resources/testExcelLineChart.xml");
     	
     	try (OutputStream outExcel = new FileOutputStream(outFile)) {
@@ -248,9 +272,9 @@ public class PublisherTest extends TestCase
     /**
      * 엑셀 Pie Chart 출력 테스트
      */
-    public void testPublishPieChartToExcel() {
+    public void testExcelPieChart() {
     	
-    	File outFile = new File("D:\\testPublishPieChart.xlsx");
+    	File outFile = new File("D:\\testExcelPieChart.xlsx");
     	File formatFile = new File("resources/testExcelPieChart.xml");
     	
     	try (OutputStream outExcel = new FileOutputStream(outFile)) {

@@ -56,7 +56,7 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	/** Cell 등에 대해 처리 완료된 경우 자동으로 이동할 커서 이동 방향(default값 :DOWN)*/
 	@Getter
 	@Setter
-	private CursorDirection cursorDirection = CursorDirection.DOWN;
+	private CursorDirection cursorMoveDirection = CursorDirection.DOWN;
 	
 	/** 커서 이동 방향 enum */
 	public enum CursorDirection {
@@ -146,7 +146,7 @@ public class WorksheetFormatter extends BasicFlowFormatter {
 	 * 설정된 방향에 따라 커서를 이동시킴
 	 */
 	public void moveCursorToNextPosition() {
-		this.getCursorDirection().move(this);
+		this.getCursorMoveDirection().move(this);
 	}
 	
 	/**
