@@ -6,14 +6,23 @@ import java.nio.charset.Charset;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.apache.poi.ss.formula.FormulaParser;
+import org.apache.poi.ss.formula.FormulaRenderer;
+import org.apache.poi.ss.formula.FormulaType;
+import org.apache.poi.ss.formula.ptg.AreaPtgBase;
+import org.apache.poi.ss.formula.ptg.Ptg;
+import org.apache.poi.ss.formula.ptg.RefPtgBase;
+import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellAddress;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.Units;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.gromit25.presspublisher.evaluator.ValueContainer;
 import com.gromit25.presspublisher.formatter.Formatter;
@@ -97,6 +106,14 @@ public class CellFormatter extends AbstractExcelFormatter {
 	@Setter
 	@FormatterAttr(name="type", mandatory=false)
 	private CellType type;
+	
+	/** 
+	 * 복사해 올 Cell의 위치
+	 */
+	@Getter
+	@Setter
+	@FormatterAttr(name="copyFrom", mandatory=false)
+	private RowColumnEval copyFrom;
 
 	/**
 	 * cell에 표시될 텍스트를 생성하는 formatter
@@ -149,7 +166,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			
 			// 만일 설정된 Cell 위치(position)가 설정되어 있으면,
 			// 설정값으로 위치를 설정함
-			if(this.getPositionExpEval() != null) {
+			if(null != this.getPositionExpEval()) {
 				rowPosition = this.getPositionExpEval().evalRowValue(values);
 				columnPosition = this.getPositionExpEval().evalColumnValue(values);				
 			}
@@ -164,16 +181,43 @@ public class CellFormatter extends AbstractExcelFormatter {
 			parent.setCursorPosition(rowPosition, columnPosition);
 			
 			////////////////////////////////////////////////////////////////
-			// 2. cell type 설정
+			// 2. 복사할 위치가 설정되어 있으면
+			//    셀을 현재 셀로 복사함
+			if(null != this.getCopyFrom()) {
+				
+				int copyRowPosition = this.getCopyFrom().evalRowValue(values);
+				int copyColumnPosition = this.getCopyFrom().evalColumnValue(values);
+				
+				XSSFCell srcCell = ExcelUtil.getCell(sheet, copyRowPosition, copyColumnPosition);
+				CellCopyPolicy policy = new CellCopyPolicy.Builder()
+										.cellValue(true)
+										.cellFormula(true)
+										.cellStyle(true)
+										.copyHyperlink(true)
+										.build();
+				
+				baseCell.copyCellFrom(srcCell, policy);
+				
+				// formula 형태이면,
+				// cell reference의 상대 위치를 계산하여 재설정함
+				if(CellType.FORMULA == baseCell.getCellType()) {
+					
+					String formula = srcCell.getCellFormula();
+					
+					int rowDiff = rowPosition - copyRowPosition;
+					int colDiff = columnPosition - copyColumnPosition;
+
+					String copyFormula = copyFormula(sheet, formula, rowDiff, colDiff);
+					baseCell.setCellFormula(copyFormula);
+				}
+			}
+			
+			////////////////////////////////////////////////////////////////
+			// 3. cell type 설정과
 			//    cell 표시될 메시지 생성 및 설정
 			
 			// cell에 표시될 메시지 변수
 			String message = "";
-			
-			// cell type 설정
-			if(null != this.getType()) {
-				baseCell.setCellType(this.getType());
-			}
 			
 			// 설정된 text formatter를 수행하여,
 			// cell에 표시될 text를 설정함
@@ -181,10 +225,16 @@ public class CellFormatter extends AbstractExcelFormatter {
 				this.getCellTextFormatter().format(messageOut, charset, values);
 				message = messageOut.toString();
 			}
-			CellFormatter.setValueToCell(baseCell, this.getType(), message);
+			
+			// copyFrom 이 설정되어 있는데,
+			// text(message)가 빈값일 때는 설정하지 않음
+			// -> copyFrom 값을 유지하기 위함
+			if(false == message.equals("") || null == this.getCopyFrom()) {
+				CellFormatter.setValueToCell(baseCell, this.getType(), message);
+			}
 	
 			////////////////////////////////////////////////////////////////
-			// 3. cell 병합 작업 수행
+			// 4. cell 병합 작업 수행
 			
 			// 병합 cell 주소
 			// default는 baseCell 만 설정
@@ -201,7 +251,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			}
 			
 			////////////////////////////////////////////////////////////////
-			// 4. cell 크기 설정
+			// 5. cell 크기 설정
 			//    병합된 cell 전체의 크기로 설정함
 			//    ex) span이 4:5 에 size가 100:110 라면,
 			//        row는 100/(4+1(baseCell)) = 20 픽셀씩 설정됨
@@ -251,7 +301,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			}
 			
 			////////////////////////////////////////////////////////////////
-			// 5. cell 자동 크기 설정
+			// 6. cell 자동 크기 설정
 			//    병합된 모든 cell에 대해 각각 적용
 			//
 			//    ※ autoSize option은 처리시간이 많이 걸리는 
@@ -267,7 +317,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			}
 	
 			////////////////////////////////////////////////////////////////
-			// 6. cell style 설정
+			// 7. cell style 설정
 			//    cell style 이름은 cell style 목록(CellStyleFormatter.CELLSTYLE_BUNDLE_NAME)에 있어야함
 			//    병합된 모든 cell에 대해 각각 적용
 			//
@@ -287,7 +337,7 @@ public class CellFormatter extends AbstractExcelFormatter {
 			}
 			
 			/////////////////////////////////////////////////////////////////
-			// 7. 후처리 
+			// 8. 후처리 
 			//    Worksheet의 Cursor를 다음 칸으로 이동 시킴
 			//
 			parent.moveCursorToNextPosition();
@@ -319,7 +369,10 @@ public class CellFormatter extends AbstractExcelFormatter {
 		}
 		
 		if(null == type) {
-			type = CellType.STRING;
+			type = cell.getCellType();
+			if(null == type) {
+				type = CellType.STRING;
+			}
 		}
 		
 		if(null == value) {
@@ -341,5 +394,63 @@ public class CellFormatter extends AbstractExcelFormatter {
 			cell.setCellValue(value);
 			break;
 		}
+	}
+	
+	/**
+	 * formula의 cell reference의 상대 위치를 계산하여 반환함 
+	 * https://stackoverflow.com/questions/47594254/apache-poi-update-formula-references-when-copying
+	 * @param sheet
+	 * @param formula
+	 * @param rowdiff
+	 * @param coldiff
+	 * @return
+	 */
+	private static String copyFormula(XSSFSheet sheet, String formula, int rowDiff, int colDiff) throws Exception {
+
+		// 1. 원본 formula를 파싱함
+		XSSFEvaluationWorkbook workbookWrapper = 
+				XSSFEvaluationWorkbook.create((XSSFWorkbook)sheet.getWorkbook());
+		Ptg[] ptgs = FormulaParser.parse(formula, workbookWrapper, FormulaType.CELL
+				, sheet.getWorkbook().getSheetIndex(sheet));
+
+		// 2. 파싱된 formula의 cell reference의 상대 위치를 계산함
+		for(int i = 0; i < ptgs.length; i++) {
+			
+			if(ptgs[i] instanceof RefPtgBase) { // base class for cell references
+				
+				RefPtgBase ref = (RefPtgBase) ptgs[i];
+				
+				if (true == ref.isColRelative()) {
+					ref.setColumn(ref.getColumn() + colDiff);
+				}
+				if (true == ref.isRowRelative()) {
+					ref.setRow(ref.getRow() + rowDiff);
+				}
+			}
+			else if (ptgs[i] instanceof AreaPtgBase) { // base class for range references
+				
+				AreaPtgBase ref = (AreaPtgBase) ptgs[i];
+				
+				if(true == ref.isFirstColRelative()) {
+					ref.setFirstColumn(ref.getFirstColumn() + colDiff);
+				}
+				
+				if(true == ref.isLastColRelative()) {
+					ref.setLastColumn(ref.getLastColumn() + colDiff);
+				}
+				
+				if(true == ref.isFirstRowRelative()) {
+					ref.setFirstRow(ref.getFirstRow() + rowDiff);
+				}
+				
+				if(true == ref.isLastRowRelative()) {
+					ref.setLastRow(ref.getLastRow() + rowDiff);
+				}
+			}
+		}
+
+		// 3. 계산된 상대 위치를 넣고 formula 스트링을 재 생성함
+		formula = FormulaRenderer.toFormulaString(workbookWrapper, ptgs);
+		return formula;
 	}
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+
+	<cellstyle name="테이블헤더스타일" font="테이블컬럼명폰트" wrap="true">
+		<border style="THIN" side="ALL" color="#000000"/>
+		<background color="#D9D9D9"/>
+		<alignment horizontal="CENTER" vertical="CENTER"/>
+	</cellstyle>
+	
+	<worksheet name="test 입니다.">
+		<rowcells>
+			<cell style="테이블헤더스타일" autoSizing="true">|문자열테스트1</cell>
+			<cell style="테이블헤더스타일" autoSizing="true">|문자열테스트2</cell>
+			<cell type="NUMERIC">|1</cell>
+			<cell type="NUMERIC">|2</cell>
+			<cell type="FORMULA">|C1+D1</cell>
+			<cell type="FORMULA">|SUM(C1:E1)</cell>
+		</rowcells>
+		<rowcells>
+			<cell copyFrom="0:0"/>
+			<cell copyFrom="0:1">|문자열변경</cell>
+			<cell copyFrom="0:2"/>
+			<cell copyFrom="0:3">|5</cell>
+			<cell copyFrom="0:4"/>
+			<cell copyFrom="0:5"/>
+		</rowcells>
+	</worksheet>
+	
+</workbook>

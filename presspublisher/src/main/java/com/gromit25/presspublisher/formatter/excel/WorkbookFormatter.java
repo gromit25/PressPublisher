@@ -73,6 +73,7 @@ public class WorkbookFormatter extends BasicFlowFormatter {
 				// 일단 파일에 출력하는 것처럼 tempWorkbook에 출력한 후
 				// 이것을 파일에서 읽어 들이는 것 처럼 tempInputStream으로 읽어 들여
 				// 암호화 시키면 정상적으로 암호화가 수행됨
+				// 참조 : https://poi.apache.org/encryption.html
 				
 				byte[] tempWorkbook = null;
 				try(ByteArrayOutputStream tempOutputStream = new ByteArrayOutputStream()) {
