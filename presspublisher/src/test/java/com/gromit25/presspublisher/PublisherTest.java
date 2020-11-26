@@ -194,6 +194,30 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * column 삽입 테스트
+     */
+    public void testExcelInsertColumn() {
+    	
+    	File outFile = new File("D:\\testExcelInsertColumn.xlsx");
+    	File formatFile = new File("resources/testExcelInsertColumn.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ValueContainer values = new ValueContainer();
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * 엑셀 템플릿을 이용한 엑셀 파일 출력 테스트
      */
     public void testExcelTemplate() {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook template="resources/org_col.xlsx">
+
+	<!-- Template1 Worksheet를 복제하여 Worksheet를 만듦 -->
+	<worksheet name="Test1" copyFrom="Template1">
+	
+		<cursor position="1:2"/>
+		<cell type="NUMERIC">|1000</cell>
+		<cell type="NUMERIC">|2</cell>
+		
+		<cursor position="1:2"/>
+		<insert-column>
+			<cell type="NUMERIC">|2000</cell>
+			<cell type="NUMERIC">|3</cell>
+			<cell copyFrom="3:3"/>
+		</insert-column>
+		
+	</worksheet>
+	
+	<!-- Template1 Worksheet를 삭제함 -->
+	<worksheet name="Template1" remove="TRUE"/>
+	
+</workbook>
