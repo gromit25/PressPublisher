@@ -62,8 +62,6 @@ public class InsertColumn extends AbstractExcelFormatter {
 			int firstRowNum = sheet.getFirstRowNum();
 			int lastRowNum = sheet.getLastRowNum();
 			
-			System.out.println(firstRowNum + "," + lastRowNum);
-			
 			for(int rowIndex = firstRowNum; rowIndex < lastRowNum; rowIndex++) {
 				
 				XSSFRow row = sheet.getRow(rowIndex);
