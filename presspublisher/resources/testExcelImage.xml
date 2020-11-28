@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbook>
+
+	<worksheet name="test 입니다.">
+		<cursor position="1:1"/>
+		<image src="resources/test.png"/>
+		<image src="resources/test.png" position="7:1"/>
+		<image src="resources/test.png" position="14:1" x-scale="2" y-scale="1.5"/>
+	</worksheet>
+	
+</workbook>

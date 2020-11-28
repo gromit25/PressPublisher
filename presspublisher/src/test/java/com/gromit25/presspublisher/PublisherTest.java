@@ -243,6 +243,30 @@ public class PublisherTest extends TestCase
     }
     
     /**
+     * 이미지 삽입 엑셀 파일 출력 테스트
+     */
+    public void testExcelImage() {
+    	
+    	File outFile = new File("D:\\testExcelImage.xlsx");
+    	File formatFile = new File("resources/testExcelImage.xml");
+    	
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		
+    		ValueContainer values = new ValueContainer();
+    		
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, Charset.defaultCharset(), values);
+    		
+    		assertTrue(true);
+    		
+    	} catch(Exception ex) {
+    		
+    		ex.printStackTrace();
+    		assertTrue(false);
+    	}
+    }
+    
+    /**
      * 엑셀파일 암호화 테스트
      */
     public void testExcelEncrypted() {

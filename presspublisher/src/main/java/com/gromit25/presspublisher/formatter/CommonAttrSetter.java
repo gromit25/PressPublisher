@@ -1,5 +1,6 @@
 package com.gromit25.presspublisher.formatter;
 
+import java.io.File;
 import java.lang.reflect.Method;
 
 import com.gromit25.presspublisher.evaluator.Evaluator;
@@ -70,6 +71,30 @@ public class CommonAttrSetter {
 	@FormatterAttrSetter({Short.class, short.class})
 	public static void setShort(Formatter formatter, Method setMethod, String attrValue) throws Exception {
 		setMethod.invoke(formatter, Short.parseShort(attrValue));
+	}
+	
+	/**
+	 * double type의 속성 설정 메서드
+	 *   FormatterAttrSetter 어노테이션 주석 참조
+	 * @param formatter 속성을 지정할 formatter 객체
+	 * @param setMethod formatter의 속성값 setMethod
+	 * @param attrValue formatter에 설정할 속성의 문자열값
+	 */
+	@FormatterAttrSetter({Double.class, double.class})
+	public static void setDouble(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, Double.parseDouble(attrValue));
+	}
+	
+	/**
+	 * File type의 속성 설정 메서드
+	 *   FormatterAttrSetter 어노테이션 주석 참조
+	 * @param formatter 속성을 지정할 formatter 객체
+	 * @param setMethod formatter의 속성값 setMethod
+	 * @param attrValue formatter에 설정할 속성의 문자열값
+	 */
+	@FormatterAttrSetter(File.class)
+	public static void setFile(Formatter formatter, Method setMethod, String attrValue) throws Exception {
+		setMethod.invoke(formatter, new File(attrValue));
 	}
 	
 	/**
