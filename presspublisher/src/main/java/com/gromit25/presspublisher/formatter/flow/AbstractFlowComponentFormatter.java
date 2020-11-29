@@ -37,17 +37,7 @@ public abstract class AbstractFlowComponentFormatter extends AbstractFlowFormatt
 
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
-		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null");
-		}
-
-		this.getBasicFlowFormatter().format(out, charset, values);
+		this.getBasicFlowFormatter().execFormat(out, charset, values);
 	}
 
 }

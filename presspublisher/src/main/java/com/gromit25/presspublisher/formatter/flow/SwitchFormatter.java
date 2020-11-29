@@ -75,15 +75,6 @@ public class SwitchFormatter extends AbstractFlowFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 체크
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		// 1. switch 문의 내용을 수행하여, 수행결과를 가지고 옴
 		Object condition = null;
 		try {

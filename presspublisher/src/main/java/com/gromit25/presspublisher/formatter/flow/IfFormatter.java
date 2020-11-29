@@ -36,15 +36,6 @@ public class IfFormatter extends AbstractFlowComponentFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		try {
 			
 			// if 문 설정된 script의 수행결과가

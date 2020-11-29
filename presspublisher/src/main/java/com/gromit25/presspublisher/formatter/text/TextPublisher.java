@@ -21,20 +21,6 @@ public class TextPublisher extends Publisher {
 
 	@Override
 	public void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception {
-		
-		// 입력값 검증
-		if(out == null) {
-			throw new Exception("out param is null.");
-		}
-		
-		if(charset == null) {
-			throw new Exception("Charset is null.");
-		}
-		
-		if(values == null) {
-			throw new Exception("Value Container is null.");
-		}
-		
 		//
 		try (TextFormatOutputStream textFormatOut = new TextFormatOutputStream(out)) {
 			this.getRootFormatter().format(textFormatOut, charset, values);

@@ -36,15 +36,6 @@ public class WhileFormatter extends AbstractFlowComponentFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 체크
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		try {
 			
 			// 설정된 조건이 TRUE 이면,

@@ -81,15 +81,6 @@ public class MapToListFormatter extends AbstractFlowFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 체크
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		// 1. map 객체를 가져옴
 		Object mapObj = null;
 		try {

@@ -59,15 +59,6 @@ public class SetFormatter extends AbstractFlowFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 체크
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		// exp에 설정된 operation을 수행 후 결과를
 		// value container에 설정할 이름(SetFormatter.name)으로 넣음
 		try {

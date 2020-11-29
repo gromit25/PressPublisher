@@ -70,15 +70,6 @@ public class ForeachFormatter extends AbstractFlowComponentFormatter {
 	@Override
 	protected void execFormat(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		// list 속성에 설정된
 		// java.lang.List object를 value container에서 가져옴
 		Object obj = null;

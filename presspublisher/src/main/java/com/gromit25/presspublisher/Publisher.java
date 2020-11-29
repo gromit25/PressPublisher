@@ -1,5 +1,7 @@
 package com.gromit25.presspublisher;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
@@ -36,5 +38,31 @@ public abstract class Publisher {
 	 * @param values value container
 	 */
 	public abstract void publish(OutputStream out, Charset charset, ValueContainer values) throws Exception;
+	
+	/**
+	 * 
+	 * @param type
+	 * @param outFile
+	 * @param formatFile
+	 * @param charset
+	 * @param values
+	 */
+	public static void publish(PublisherType type, File formatFile, File outFile, Charset charset, ValueContainer values) throws Exception {
+    	try (OutputStream outExcel = new FileOutputStream(outFile)) {
+    		Publisher publisher = PublisherFactory.create(PublisherType.EXCEL_FILE, formatFile);
+    		publisher.publish(outExcel, charset, new ValueContainer());
+    	}
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param formatFile
+	 * @param outFile
+	 * @param values
+	 */
+	public static void publish(PublisherType type, File formatFile, File outFile, ValueContainer values) throws Exception {
+		Publisher.publish(type, formatFile, outFile, Charset.defaultCharset(), values);
+	}
 	
 }
