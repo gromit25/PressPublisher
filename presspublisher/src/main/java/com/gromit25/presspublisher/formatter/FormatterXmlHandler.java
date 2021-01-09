@@ -289,7 +289,7 @@ public abstract class FormatterXmlHandler extends DefaultHandler {
 	    		this.getFormatter().addText(text);
 	    	}
 		} catch(Exception ex) {
-			throw new SAXException(ex.getMessage());
+			throw new SAXException(ex);
 		}
     }
 	

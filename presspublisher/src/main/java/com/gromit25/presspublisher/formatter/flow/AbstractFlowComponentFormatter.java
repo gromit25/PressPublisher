@@ -23,7 +23,7 @@ public abstract class AbstractFlowComponentFormatter extends AbstractFlowFormatt
 	 */
 	@Getter
 	@Setter
-	private BasicFlowFormatter basicFlowFormatter;
+	private BasicFlowFormatter basicFlowFormatter = new BasicFlowFormatter();
 
 	@Override
 	public void addText(String text) throws FormatterException {

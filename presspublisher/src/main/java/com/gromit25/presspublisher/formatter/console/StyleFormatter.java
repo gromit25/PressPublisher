@@ -61,20 +61,8 @@ public class StyleFormatter extends AbstractConsoleFormatter {
 	@Override
 	public void formatConsole(OutputStream out, Charset charset, ValueContainer values) throws FormatterException {
 		
-		// 입력값 검증
-		if(out == null) {
-			throw new FormatterException(this, "out param is null.");
-		}
-		
-		if(charset == null) {
-			throw new FormatterException(this, "Charset is null.");
-		}
-		
-		if(values == null) {
-			throw new FormatterException(this, "Value Container is null.");
-		}
-		
 		try {
+			
 			// 현재 설정된 style을
 			// 순서대로 모두 적용함 
 			for(ConsoleStyle style: this.getStyleTypes()) {
@@ -89,6 +77,7 @@ public class StyleFormatter extends AbstractConsoleFormatter {
 			out.write(ConsoleStyle.RESET.getCode().getBytes(charset));
 			
 			out.flush();
+			
 		} catch(Exception ex) {
 			throw new FormatterException(this, ex);
 		}

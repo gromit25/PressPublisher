@@ -147,7 +147,12 @@ public class CellFormatter extends AbstractExcelFormatter {
 		// Cell에 표시될 text/flow formatter 추가
 		// text/flow formatter 여부는
 		// TextFlowFormatter의 추상 클래스인 AbstractTextFormatter에서 체크함
-		this.getCellTextFormatter().addChildFormatter(formatter);
+		
+		if(formatter instanceof TextFlowFormatter) {
+			this.getCellTextFormatter().addChildFormatter(formatter);
+		} else {
+			throw new FormatterException(this, "unexpected formatter type:" + formatter.getClass());
+		}
 
 	}
 
