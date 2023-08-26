@@ -12,7 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <deploy.target.dir>D:/app/presspublisher</deploy.target.dir>
+    <deploy.target.dir>C:/apps/presspublisher</deploy.target.dir>
   </properties>
   
   <!-- jar 파일 생성 -->
